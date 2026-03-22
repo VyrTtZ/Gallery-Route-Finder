@@ -121,6 +121,51 @@ public class Vertex {
 
         return res;
     }
+    public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
+        int[] current;
+        HashSet<int[]> bin = new HashSet<>();
+        bin.addAll(wallsAndObjects);
+        System.out.println("test1");
+        LinkedList<int[]> res = new LinkedList<>();
+        Queue<int[]> neighborContainer = new LinkedList<>();
+
+        bin.add(start);
+        neighborContainer.add(start);
+        System.out.println("test2");
+        while(!neighborContainer.isEmpty()){
+            current = neighborContainer.poll();
+            res.add(current);
+            if(current == end) {
+                return res;
+            }
+            int[][] neighbors = {
+                    {start[0] - 1, start[1] - 1},
+                    {start[0], start[1] - 1},
+                    {start[0] + 1, start[1] - 1},
+                    {start[0] - 1, start[1]},
+                    {start[0] + 1, start[1]},
+                    {start[0] - 1, start[1] + 1},
+                    {start[0], start[1] + 1},
+                    {start[0] + 1, start[1] + 1}
+            };
+
+            for(int[] i : neighbors){ // helper bc concModException
+                boolean found = false;
+                for(int[] j : bin){
+                    if(i[0] == j[0] && i[1] == j[1]){
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found){
+                    bin.add(i);
+                    neighborContainer.add(i);
+                }
+            }
+        }
+
+        return res;
+    }
 
     public LinkedList<Vertex> DFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
         HashSet<Vertex> bin = new HashSet<>();

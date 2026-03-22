@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -122,6 +123,33 @@ class VertexTest {
         avoid.add(g);
         LinkedList<Vertex> avoided = a.BFS(c, g, avoid);
         assertFalse(avoided.contains(h));
+    }
+
+    @Test
+    void BFSpx(){
+        LinkedList<int[]> wallsAndObjects = new LinkedList<>();
+
+        for (int i = 0; i < 7; i++) {
+            wallsAndObjects.add(new int[]{0, i});
+            wallsAndObjects.add(new int[]{6, i});
+            wallsAndObjects.add(new int[]{i, 0});
+            wallsAndObjects.add(new int[]{i, 6});
+        }
+        System.out.println("test1");
+        wallsAndObjects.add(new int[]{3, 3});
+
+        int[] start = {1, 1};
+        int[] end   = {5, 5};
+        System.out.println("test2");
+        LinkedList<int[]> path = Vertex.BFS(start, end, wallsAndObjects);
+        assertFalse(path.isEmpty());
+
+        boolean flag = false;
+        for(int[] x : path){
+            if(x[0] == 3 && x[1] == 3) flag = true;
+        }
+        assertFalse(flag);
+
     }
 
     @Test
