@@ -61,7 +61,7 @@
                     <id>default-cli</id>
                     <configuration>
                         <mainClass>
-                            org.example.autumnleavesdetector/org.example.autumnleavesdetector.MainApp
+                            org.main.autumnleavesdetector/org.main.autumnleavesdetector.MainApp
                         </mainClass>
                         <launcher>app</launcher>
                         <jlinkZipName>app</jlinkZipName>
