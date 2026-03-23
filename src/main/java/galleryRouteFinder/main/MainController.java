@@ -8,10 +8,7 @@ import javafx.scene.control.TextField;
 import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.PriorityQueue;
-import java.util.Scanner;
+import java.util.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -129,7 +126,10 @@ public class MainController {
         }
         else
         {
-            //TODO Gustaw BFS
+            int startId=Integer.parseInt(startingRoom.getText()), endId=Integer.parseInt(endingRoom.getText());
+            Vertex startV = getVertex(startId), endV=getVertex(endId);
+            LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
+            for(Vertex v : path) System.out.println(v.getId());
         }
     }
 

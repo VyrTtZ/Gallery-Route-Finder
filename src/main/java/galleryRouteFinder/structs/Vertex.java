@@ -103,7 +103,7 @@ public class Vertex {
 
     }
 
-    public LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
+    public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
         Vertex current;
         HashSet<Vertex> bin = new HashSet<>();
         LinkedList<Vertex> res = new LinkedList<>();
