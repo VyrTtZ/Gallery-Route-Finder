@@ -3,18 +3,26 @@ package galleryRouteFinder.main;
 import galleryRouteFinder.structs.Edge;
 import galleryRouteFinder.structs.Vertex;
 import galleryRouteFinder.utilities.Utils;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
+import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.PriorityQueue;
 import java.util.Scanner;
 import java.io.File;
 import java.io.IOException;
 
 public class MainController {
     //Front end
+    public TextField startingRoom, endingRoom;
 
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
+    private boolean shortestPathAlgorithm=false; //False=Dijkstra, true=bfs,
+
     ArrayList <Vertex> vertices=new ArrayList <>();
     ArrayList <Edge> edges;
 
@@ -34,7 +42,7 @@ public class MainController {
                 String line=read.nextLine();
                 //Format: ID, x, y, name
                 int start=0;
-                Vertex vertex=new Vertex(0, 0, 0, "");
+                Vertex vertex=new Vertex();
                 for (int i=0; i<4; i++)
                 {
                     String tmp=Utils.commaStringExtraction(line, start);
@@ -79,13 +87,15 @@ public class MainController {
                         edge.setNode1(getVertex(data));
                     else if (i==1)
                         edge.setNode2(getVertex(data));
-                    else if (i%2==0)
-                    {
-                        //Waiting
-                    }
                     else
                     {
-                        //Waiting
+                        int[] tmpArray=new int[2];
+                        if (i%2==0) {
+                            tmpArray[0] = data;
+                            edge.getIntermediaryNodes().add(tmpArray);
+                        }
+                        else
+                            edge.getIntermediaryNodes().getLast()[1]=data;
                     }
                     i++;
                 }
@@ -96,6 +106,71 @@ public class MainController {
         {
             e.printStackTrace();
         }
+        for (Vertex vertex : vertices)
+        {
+            vertex.getBranches().clear();
+            for (Edge edge : edges)
+            {
+                if (edge.getNode1().equals(vertex) || edge.getNode2().equals(vertex))
+                {
+                    vertex.getBranches().add(edge);
+                }
+            }
+        }
+    }
+
+    public void shortestPath()
+    {
+        if (shortestPathAlgorithm) //Diji
+        {
+            ArrayList <Integer> res=findShortestPathDijkstra();
+            for (int i=0; i<res.size(); i++)
+                System.out.println(res.get(i));
+        }
+        else
+        {
+            //TODO Gustaw BFS
+        }
+    }
+
+    private ArrayList<Integer> findShortestPathDijkstra()
+    {
+        //TODO Add validation
+        int startId=Integer.parseInt(startingRoom.getText()), endId=Integer.parseInt(endingRoom.getText());
+        boolean[] visited=new boolean[vertices.size()];
+        Vertex[] prev=new Vertex[vertices.size()];
+        Vertex startVertex=getVertex(startId), endVertex=getVertex(endId);
+        PriorityQueue <Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
+            if (o1.getValue()<o2.getValue())
+                return -1;
+            else if (o1.getValue()>o2.getValue())
+                return 1;
+            return 0;
+        });
+        queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
+
+        while (!queue.isEmpty())
+        {
+            Pair<Pair<Vertex, Vertex>, Double> pair=queue.poll();
+            Vertex currentVertex=pair.getKey().getValue();
+            Vertex prevVertex=pair.getKey().getKey();
+            double cost=pair.getValue();
+            visited[currentVertex.getId()]=true;
+            prev[currentVertex.getId()]=prevVertex;
+            if (currentVertex.equals(endVertex))
+                break;
+            for (Edge edge: currentVertex.getBranches())
+                for (Vertex tmp: edge.getNodes())
+                    if (!tmp.equals(currentVertex) && !visited[tmp.getId()])
+                        queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
+        }
+        ArrayList <Integer> path=new ArrayList<>();
+        while (!endVertex.equals(startVertex))
+        {
+            path.add(endVertex.getId());
+            endVertex=prev[endVertex.getId()];
+        }
+        return path;
     }
 
     private Vertex getVertex(int id)

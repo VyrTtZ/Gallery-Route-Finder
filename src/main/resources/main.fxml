@@ -67,7 +67,7 @@
             <Font size="17.0" />
          </font>
       </Button>
-      <TextField layoutX="734.0" layoutY="741.0" prefHeight="38.0" prefWidth="59.0" promptText="ID">
+      <TextField fx:id="startingRoom" layoutX="734.0" layoutY="741.0" prefHeight="38.0" prefWidth="59.0" promptText="ID">
          <font>
             <Font size="17.0" />
          </font>
@@ -77,7 +77,7 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <TextField layoutX="1024.0" layoutY="741.0" prefHeight="38.0" prefWidth="59.0" promptText="ID">
+      <TextField fx:id="endingRoom" layoutX="1024.0" layoutY="741.0" prefHeight="38.0" prefWidth="59.0" promptText="ID">
          <font>
             <Font size="17.0" />
          </font>
