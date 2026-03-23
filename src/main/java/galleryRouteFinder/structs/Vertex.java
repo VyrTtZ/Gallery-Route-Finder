@@ -13,10 +13,10 @@ public class Vertex {
     private int id = 0;
     private static int nextId = 1;
 
-    public Vertex(int posX, int posY, String name) {
+    public Vertex(int id, int posX, int posY, String name) {
         setPosX(posX);
         setPosY(posY);
-        setId();
+        setId(id);
         this.name = name;
         this.neighbors = new LinkedList<>();
         this.branches = new LinkedList<>();
@@ -42,8 +42,8 @@ public class Vertex {
         return id;
     }
 
-    public void setId(){
-        this.id = nextId++;
+    public void setId(int id){
+        this.id = id;
     }
 
     public String getName() {
