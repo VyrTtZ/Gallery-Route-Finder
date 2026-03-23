@@ -22,6 +22,15 @@ public class Vertex {
         this.branches = new LinkedList<>();
     }
 
+    public Vertex(){
+        setPosX(0);
+        setPosY(0);
+        setId(8888);
+        this.name = "diddy";
+        this.neighbors = new LinkedList<>();
+        this.branches = new LinkedList<>();
+    }
+
     public int getPosX() {
         return posX;
     }

@@ -16,14 +16,14 @@ class VertexTest {
 
     @BeforeEach
     void setUp() {
-        a = new Vertex(0, 0, "A");
-        b = new Vertex(1, 2, "B");
-        c = new Vertex(2, 1, "C");
-        d = new Vertex(3, 3, "D");
-        e = new Vertex(4, 0, "E");
-        f = new Vertex(2, 4, "F");
-        g = new Vertex(5, 2, "G");
-        h = new Vertex(6, 1, "H");
+//        a = new Vertex(0, 0, "A");
+//        b = new Vertex(1, 2, "B");
+//        c = new Vertex(2, 1, "C");
+//        d = new Vertex(3, 3, "D");
+//        e = new Vertex(4, 0, "E");
+//        f = new Vertex(2, 4, "F");
+//        g = new Vertex(5, 2, "G");
+//        h = new Vertex(6, 1, "H");
 
         a.addNeighbor(b);
         a.addNeighbor(c);
