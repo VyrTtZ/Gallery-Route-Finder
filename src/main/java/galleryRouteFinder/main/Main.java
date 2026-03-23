@@ -10,6 +10,7 @@ public class Main extends Application {
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/main.fxml")); //test
         Scene scene = new Scene(loader.load());
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

@@ -5,6 +5,8 @@ import galleryRouteFinder.structs.Vertex;
 import galleryRouteFinder.utilities.Utils;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.util.Pair;
 
 import java.io.FileNotFoundException;
@@ -15,6 +17,7 @@ import java.io.IOException;
 public class MainController {
     //Front end
     public TextField startingRoom, endingRoom;
+    public ImageView imageView;
 
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
@@ -27,6 +30,7 @@ public class MainController {
     {
         getVertices();
         getEdges();
+        imageView.setImage(new Image("map.jpg"));
     }
 
     public void getVertices()
