@@ -12,18 +12,21 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class VertexTest {
 
-    Vertex a, b, c, d, e, f, g, h;
+    Vertex a, b, c, d, e, f, g, h, i, j, k;
 
     @BeforeEach
     void setUp() {
-//        a = new Vertex(0, 0, "A");
-//        b = new Vertex(1, 2, "B");
-//        c = new Vertex(2, 1, "C");
-//        d = new Vertex(3, 3, "D");
-//        e = new Vertex(4, 0, "E");
-//        f = new Vertex(2, 4, "F");
-//        g = new Vertex(5, 2, "G");
-//        h = new Vertex(6, 1, "H");
+         a = new Vertex(1, 0, 0, "A");
+        b = new Vertex(2, 1, 2, "B");
+        c = new Vertex(3, 2, 1, "C");
+        d = new Vertex(4, 3, 3, "D");
+        e = new Vertex(5, 4, 0, "E");
+        f = new Vertex(6, 2, 4, "F");
+        g = new Vertex(7, 5, 2, "G");
+        h = new Vertex(8, 6, 1, "H");
+        i = new Vertex(9, 3, 1, "I");
+        j = new Vertex(10, 4, 3, "J");
+        k = new Vertex(11, 5, 4, "K");
 
         a.addNeighbor(b);
         a.addNeighbor(c);
@@ -34,6 +37,14 @@ class VertexTest {
         d.addNeighbor(g);
         e.addNeighbor(g);
         g.addNeighbor(h);
+        b.addNeighbor(i);
+        c.addNeighbor(i);
+        d.addNeighbor(j);
+        i.addNeighbor(j);
+        j.addNeighbor(k);
+        e.addNeighbor(k);
+        k.addNeighbor(h);
+        f.addNeighbor(h);
     }
 
     @AfterEach
@@ -154,17 +165,17 @@ class VertexTest {
 
     @Test
     void DFS() {
-        LinkedList<Vertex> result = a.DFS(a, h, null);
+        LinkedList<Vertex> result = a.DFS(a, k, null);
+        for(Vertex v : result) System.out.println(v.getName());
         assertEquals(a, result.getFirst());
-        assertTrue(result.contains(h));
-        assertEquals(result.getLast(), h);
+        assertEquals(result.getLast(), k);
 
 
         LinkedList<Vertex> avoid = new LinkedList<>();
         avoid.add(g);
-        LinkedList<Vertex> avoided = a.DFS(a, f, avoid);
+        LinkedList<Vertex> avoided = a.DFS(a, c, avoid);
         for(Vertex v : avoided) System.out.println(v.getName());
         assertFalse(avoided.contains(h));
-        assertEquals(avoided.getLast(), f);
+        assertEquals(avoided.getLast(), c);
     }
 }

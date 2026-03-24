@@ -179,24 +179,28 @@ public class Vertex {
     public LinkedList<Vertex> DFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
         LinkedList<Vertex> bin = new LinkedList<>();
         LinkedList<Vertex> res = new LinkedList<>();
-        dfsHelper(start, bin,end, res, avoid);
+        if(avoid != null) bin.addAll(avoid);
+        dfsHelper(start, bin,end, res);
         return res;
     }
 
-    public boolean dfsHelper(Vertex v, LinkedList<Vertex> bin, Vertex end, LinkedList<Vertex> res, LinkedList<Vertex> avoidSet){
-        if(avoidSet != null) bin.addAll(avoidSet);
+    public void dfsHelper(Vertex v, LinkedList<Vertex> bin, Vertex end, LinkedList<Vertex> res){
+
         bin.add(v);
         res.add(v);
-        if(v == end) return true;
+        if(v == end) return;
 
         for(Vertex x : v.getNeighbors()){
             if(!bin.contains(x)){
-                if(dfsHelper(x, bin, end, res, avoidSet)) return true;
+                dfsHelper(x, bin, end, res);
+                if (res.getLast() == end)
+                    return;
             }
         }
 
-        res.removeLast();
-        return false;
+        if(res.getLast() != end) res.removeLast();
+
+
     }
 
 
