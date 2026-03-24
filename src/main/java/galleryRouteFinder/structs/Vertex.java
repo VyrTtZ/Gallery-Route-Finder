@@ -135,14 +135,18 @@ public class Vertex {
 
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
         LinkedList<int[]> bin = new LinkedList<>();
-        if(!wallsAndObjects.isEmpty())
+        if(wallsAndObjects != null)
             bin.addAll(wallsAndObjects);
         LinkedList<int[]> res = new LinkedList<>();
         Queue<LinkedList<int[]>> agenda = new LinkedList<>(new LinkedList<>());
 
+        System.out.println("test1");
+
         bin.add(start);
         LinkedList<int[]> current = new LinkedList<>();
         current.add(start);
+
+        System.out.println("test2");
 
         while(!agenda.isEmpty()){
             current = agenda.poll();
