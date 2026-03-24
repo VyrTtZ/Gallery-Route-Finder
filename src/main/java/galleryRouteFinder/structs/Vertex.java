@@ -134,21 +134,23 @@ public class Vertex {
     }
 
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
-        int[] current;
         LinkedList<int[]> bin = new LinkedList<>();
-        bin.addAll(wallsAndObjects);
-        System.out.println("test1");
+        if(!wallsAndObjects.isEmpty())
+            bin.addAll(wallsAndObjects);
         LinkedList<int[]> res = new LinkedList<>();
-        Queue<int[]> neighborContainer = new LinkedList<>();
+        Queue<LinkedList<int[]>> agenda = new LinkedList<>(new LinkedList<>());
 
         bin.add(start);
-        neighborContainer.add(start);
-        System.out.println("test2");
-        while(!neighborContainer.isEmpty()){
-            current = neighborContainer.poll();
-            res.add(current);
-            if(current == end) {
-                return res;
+        LinkedList<int[]> current = new LinkedList<>();
+        current.add(start);
+
+        while(!agenda.isEmpty()){
+            current = agenda.poll();
+            int[] currentLast = current.getLast();
+
+
+            if(currentLast == end) {
+                return current;
             }
             int[][] neighbors = {
                     {start[0] - 1, start[1] - 1},
@@ -171,7 +173,8 @@ public class Vertex {
                 }
                 if(!found){
                     bin.add(i);
-                    neighborContainer.add(i);
+                    current.add(i);
+                    agenda.add(current);
                 }
             }
         }
