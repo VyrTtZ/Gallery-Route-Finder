@@ -146,6 +146,14 @@ public class MainController {
                     vertex.getBranches().add(edge);
                 }
             }
+
+        }
+        for(Vertex v : vertices){
+
+            for(Edge e : edges){
+                if(e.getNode1().equals(v)) v.addNeighbor(e.getNode2());
+                else if(e.getNode2().equals(v)) v.addNeighbor(e.getNode1());
+            }
         }
     }
 

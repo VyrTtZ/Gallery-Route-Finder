@@ -136,8 +136,7 @@ public class Vertex {
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
         int[] current;
         LinkedList<int[]> bin = new LinkedList<>();
-        if (wallsAndObjects != null)
-            bin.addAll(wallsAndObjects);
+        bin.addAll(wallsAndObjects);
         System.out.println("test1");
         LinkedList<int[]> res = new LinkedList<>();
         Queue<int[]> neighborContainer = new LinkedList<>();
@@ -189,9 +188,9 @@ public class Vertex {
         Vertex[] prev=new Vertex[maxVertices+1];
         PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
             if (o1.getValue()<o2.getValue())
-                return 1;
-            else if (o1.getValue()>o2.getValue())
                 return -1;
+            else if (o1.getValue()>o2.getValue())
+                return 1;
             return 0;
         });
         queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
@@ -250,4 +249,12 @@ public class Vertex {
 
 
     }
+
+
+
+
+
+
+
+
 }
