@@ -117,7 +117,7 @@ public class Vertex {
             LinkedList<Vertex> currentPath = agenda.poll();
             Vertex currentNode = currentPath.getLast();
 
-            if (currentNode.equals(end)) {
+            if (currentNode == end) {
                 return currentPath;
             }
 

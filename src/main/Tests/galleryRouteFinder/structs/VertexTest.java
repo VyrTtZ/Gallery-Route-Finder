@@ -186,7 +186,13 @@ class VertexTest {
         for (Vertex v : result) BFSRes.add(v.getId());
 
         ArrayList <Integer> dijkstraRes = Vertex.dijkstraShortestPath(a, k, 12, null, null);
-        for (int i = 0; i < dijkstraRes.size(); i++)
+        System.out.println(dijkstraRes.size() + "----" + BFSRes.size());
+        for(int i : dijkstraRes)System.out.println(i);
+        System.out.println("tttt");
+        for(int i : BFSRes) System.out.println(i);
+        for (int i = 0; i < dijkstraRes.size(); i++) {
+            System.out.println(dijkstraRes.get(i) + "    -     res 1");
             assertSame(dijkstraRes.get(i), BFSRes.get(i));
+        }
     }
 }
