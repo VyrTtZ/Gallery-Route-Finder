@@ -20,7 +20,7 @@
 21,441,160,Anthony Van Dyke
 22,677,161,Rembrandt
 23,675,213,The  Cradle of Dutch Painting
-24,677,263,International Ambitions
+24,677,214,International Ambitions
 25,731,260,Still Life
 26,626,306,Intimate Baroque
 27,678,306,The Italinate Landscape
@@ -28,10 +28,10 @@
 29,729,261,Making Paris a New Rome
 30,940,366,Power and Piety
 31,940,289,Charles I and Henrietta Maria
-32,1160,366,Baroque Splendour
-33,1333,366,City of Pleasure
-34,1333,530,A Distinct Style
-35,1245,530,Rococo to Revolution
+32,1160,368,Baroque Splendour
+33,1333,368,City of Pleasure
+34,1333,368,A Distinct Style
+35,1332,530,Rococo to Revolution
 36,1160,530,Claude and Turner
 37,1160,444,The International 18th Century
 38,1077,530,The Academy
@@ -43,20 +43,20 @@
 44,1160,707,Post-Impressionism
 45,1094,707,New Energies
 46,1011,741,Claude Monet
-510,181,472,51a The Burlington House Cartoon
-51,181,524,The Wonder of Art
-52,181,591,Creating Illusion
-53,200,644,Divine Encounters
-54,239,704,Northern European Painting
-55,230,768,Lines of Expression
-56,200,823,Looking at Nature
-57,133,768,Wonders of Design
-58,133,706,Lyrical Narrative
-59,133,773,Architecture and Illiusion
-60,133,525,Ambition and Innovation
-61,65,525,Shaping the Renaissance Ideal
-62,65,593,The Family Palace
-63,75,651,Le Serinissima
-64,75,725,Gold
-65,75,771,Piety and Passion
-66,89,811,Piero della Francesca
+510,165,463,51a The Burlington House Cartoon
+51,177,525,The Wonder of Art
+52,187,590,Creating Illusion
+53,187,645,Divine Encounters
+54,236,707,Northern European Painting
+55,225,768,Lines of Expression
+56,202,823,Looking at Nature
+57,121,768,Wonders of Design
+58,121,707,Lyrical Narrative
+59,121,651,Architecture and Illiusion
+60,121,525,Ambition and Innovation
+61,54,525,Shaping the Renaissance Ideal
+62,54,593,The Family Palace
+63,54,651,Le Serinissima
+64,54,725,Gold
+65,79,768,Piety and Passion
+66,79,811,Piero della Francesca
