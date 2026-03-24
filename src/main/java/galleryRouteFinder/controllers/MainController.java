@@ -1,4 +1,4 @@
-package galleryRouteFinder.main;
+package galleryRouteFinder.controllers;
 
 import galleryRouteFinder.structs.Edge;
 import galleryRouteFinder.structs.Vertex;
@@ -8,7 +8,6 @@ import javafx.animation.SequentialTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -17,11 +16,8 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
-import java.io.File;
-import java.io.IOException;
 
 public class MainController {
     //Front end
@@ -29,10 +25,11 @@ public class MainController {
     public ImageView imageView;
     public AnchorPane imagePane;
     public Button shortestPathToggle;
+    public Label warningLabel;
 
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
-    private boolean shortestPathAlgorithm=false; //True=Dijkstra, false=bfs,
+    private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
 
     ArrayList <Vertex> vertices=new ArrayList <>();
     ArrayList <Edge> edges=new ArrayList <>();
@@ -137,14 +134,19 @@ public class MainController {
 
     public void shortestPath()
     {
+        if (Utils.checkStringInvalidInteger(startingRoom.getText()) || Utils.checkStringInvalidInteger(endingRoom.getText()))
+        {
+            warningLabel.setText("The input/output room must be a number");
+            return;
+        }
+        int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
+        Vertex startV = getVertex(startId), endV = getVertex(endId);
         ArrayList <Integer> res=new ArrayList<>();
         if (shortestPathAlgorithm) //Diji
         {
-            res=findShortestPathDijkstra();
+            res=Vertex.dijkstraShortestPath(startV, endV, 25);
         }
         else {
-            int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
-            Vertex startV = getVertex(startId), endV = getVertex(endId);
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
@@ -153,7 +155,6 @@ public class MainController {
 
     private ArrayList<Integer> findShortestPathDijkstra()
     {
-        //TODO Add validation
         int startId=Integer.parseInt(startingRoom.getText()), endId=Integer.parseInt(endingRoom.getText());
         boolean[] visited=new boolean[25];
         Vertex[] prev=new Vertex[25]; //vertices.size()

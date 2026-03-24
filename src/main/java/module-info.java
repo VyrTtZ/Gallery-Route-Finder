@@ -5,4 +5,6 @@ module galleryRouteFinder {
     opens galleryRouteFinder.main to javafx.fxml;
     exports galleryRouteFinder.main;
     exports galleryRouteFinder.structs;
+    exports galleryRouteFinder.controllers;
+    opens galleryRouteFinder.controllers to javafx.fxml;
 }
