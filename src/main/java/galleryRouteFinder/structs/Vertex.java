@@ -103,33 +103,36 @@ public class Vertex {
 
     }
 
-    public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
-        Vertex current;
-        HashSet<Vertex> bin = new HashSet<>();
-        LinkedList<Vertex> res = new LinkedList<>();
-        Queue<Vertex> neighborContainer = new LinkedList<>();
+    public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid) {
+        Queue<LinkedList<Vertex>> agenda = new LinkedList<>();
+        LinkedList<Vertex> visited = new LinkedList<>();
 
-        if(avoid != null)
-            bin.addAll(avoid);
-        bin.add(start);
-        neighborContainer.add(start);
+        if (avoid != null) visited.addAll(avoid);
+        LinkedList<Vertex> firstPath = new LinkedList<>();
+        firstPath.add(start);
+        agenda.add(firstPath);
+        visited.add(start);
 
-        while(!neighborContainer.isEmpty()){
-            current = neighborContainer.poll();
-            res.add(current);
-            if(current == end) {
-                return res;
+        while (!agenda.isEmpty()) {
+            LinkedList<Vertex> currentPath = agenda.poll();
+            Vertex currentNode = currentPath.getLast();
+
+            if (currentNode.equals(end)) {
+                return currentPath;
             }
-            for(Vertex v : current.getNeighbors()){
-                if(!bin.contains(v)) {
-                    bin.add(v);
-                    neighborContainer.add(v);
+
+            for (Vertex neighbor : currentNode.getNeighbors()) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    LinkedList<Vertex> nextPath = new LinkedList<>(currentPath);
+                    nextPath.add(neighbor);
+                    agenda.add(nextPath);
                 }
             }
         }
-
-        return res;
+        return null;
     }
+
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
         int[] current;
         LinkedList<int[]> bin = new LinkedList<>();
