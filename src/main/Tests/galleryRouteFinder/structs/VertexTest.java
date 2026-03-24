@@ -125,15 +125,15 @@ class VertexTest {
 
     @Test
     void BFS() {
-        LinkedList<Vertex> result = a.BFS(a, d, null);
+        LinkedList<Vertex> result = a.BFS(a, c, null);
         assertEquals(a, result.getFirst());
-        assertEquals(d, result.getLast());
+        assertEquals(c, result.getLast());
 
         for(Vertex v : result) System.out.println(v.getName());
         LinkedList<Vertex> avoid = new LinkedList<>();
         avoid.add(g);
-        LinkedList<Vertex> avoided = a.BFS(c, g, avoid);
-        assertFalse(avoided.contains(h));
+        LinkedList<Vertex> avoided = a.BFS(a, k, avoid);
+        assertFalse(avoided.contains(g));
     }
 
     @Test
