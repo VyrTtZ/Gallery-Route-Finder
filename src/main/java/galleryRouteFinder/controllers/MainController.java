@@ -81,7 +81,6 @@ public class MainController {
             for (int i=0; i<4; i++)
             {
                 String tmp=Utils.commaStringExtraction(line, start);
-                start+=tmp.length()+1;
                 int data=0;
                 if (i!=3)
                     data=Integer.parseInt(tmp);
@@ -90,8 +89,9 @@ public class MainController {
                     case 0 -> vertex.setId(data);
                     case 1 -> vertex.setPosX(data);
                     case 2 -> vertex.setPosY(data);
-                    case 3 -> vertex.setName(tmp);
+                    case 3 -> vertex.setName(line.substring(start, line.length()-1));
                 }
+                start+=tmp.length()+1;
             }
             vertices.add(vertex);
         }
