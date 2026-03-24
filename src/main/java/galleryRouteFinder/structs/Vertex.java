@@ -176,10 +176,13 @@ public class Vertex {
         return res;
     }
 
-    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, int maxVertices)
+    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, int maxVertices, ArrayList <Integer> excluded, ArrayList<Integer> included)
     {
-        boolean[] visited=new boolean[maxVertices];
-        Vertex[] prev=new Vertex[maxVertices]; //vertices.size()
+        boolean[] visited=new boolean[maxVertices+1];
+        if (excluded!=null)
+            for (int i : excluded)
+                visited[i]=true;
+        Vertex[] prev=new Vertex[maxVertices+1];
         PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
             if (o1.getValue()<o2.getValue())
                 return -1;

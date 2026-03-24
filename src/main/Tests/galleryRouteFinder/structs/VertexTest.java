@@ -1,12 +1,12 @@
 package galleryRouteFinder.structs;
 
-import galleryRouteFinder.structs.Vertex;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -177,5 +177,16 @@ class VertexTest {
         for(Vertex v : avoided) System.out.println(v.getName());
         assertFalse(avoided.contains(h));
         assertEquals(avoided.getLast(), c);
+    }
+
+    @Test
+    void BFSandDijkstra() {
+        LinkedList<Vertex> result = Vertex.BFS(a, k, null);
+        List<Integer> BFSRes = new ArrayList<>();
+        for (Vertex v : result) BFSRes.add(v.getId());
+
+        ArrayList <Integer> dijkstraRes = Vertex.dijkstraShortestPath(a, k, 12, null, null);
+        for (int i = 0; i < dijkstraRes.size(); i++)
+            assertSame(dijkstraRes.get(i), BFSRes.get(i));
     }
 }
