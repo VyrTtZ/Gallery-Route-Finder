@@ -136,7 +136,8 @@ public class Vertex {
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
         int[] current;
         LinkedList<int[]> bin = new LinkedList<>();
-        bin.addAll(wallsAndObjects);
+        if (wallsAndObjects != null)
+            bin.addAll(wallsAndObjects);
         System.out.println("test1");
         LinkedList<int[]> res = new LinkedList<>();
         Queue<int[]> neighborContainer = new LinkedList<>();
@@ -249,12 +250,4 @@ public class Vertex {
 
 
     }
-
-
-
-
-
-
-
-
 }

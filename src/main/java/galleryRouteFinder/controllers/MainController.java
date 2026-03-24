@@ -5,6 +5,7 @@ import galleryRouteFinder.structs.Vertex;
 import galleryRouteFinder.utilities.Utils;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
+import javafx.scene.PointLight;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
@@ -30,6 +32,8 @@ public class MainController {
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
+    private boolean clickedOnce=false;
+    private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
 
     ArrayList <Vertex> vertices=new ArrayList <>();
     ArrayList <Edge> edges=new ArrayList <>();
@@ -41,6 +45,19 @@ public class MainController {
         shortestPathToggle.setOnAction(e->{
             shortestPathAlgorithm=!shortestPathAlgorithm;
             shortestPathToggle.setText(shortestPathAlgorithm? "Dijkstra":"BFS");
+        });
+        imageView.setOnMouseClicked(e->{
+            int tmpX=(int)e.getX(), tmpY=(int)e.getY();
+            if (!clickedOnce)
+            {
+                clickedOnce=true;
+                warningLabel.setText("First pixel at: "+tmpX+", "+tmpY+". Specific second pixel");
+                firstCoords=new Pair<>(tmpX, tmpY);
+            }
+            else
+            {
+                bfsPixelPath(tmpX, tmpY);
+            }
         });
         imageView.setImage(new Image("map.jpg"));
     }
@@ -149,10 +166,46 @@ public class MainController {
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
-        visualizePath(res);
+        visualizeShortestPath(res);
     }
 
-    private void visualizePath(List<Integer> path)
+    public void bfsPixelPath(int secondX, int secondY)
+    {
+        int[] start=new int[2];
+        int[] end=new int[2];
+        start[0]=firstCoords.getKey();
+        start[1]=firstCoords.getValue();
+
+        end[0]=secondX;
+        end[1]=secondY;
+
+        System.out.println("start:"+start[0]+","+start[1]+","+end[0]+","+end[1]);
+        //TODO fix bfs pixel
+
+        LinkedList<int[]> res=Vertex.BFS(start, end, null);
+        for  (int[] v : res)
+            System.out.println(v[0]+","+v[1]);
+        visualizePixelPath(res);
+    }
+
+    private void visualizePixelPath(LinkedList<int[]> res)
+    {
+        SequentialTransition sequence=new SequentialTransition();
+        imagePane.getChildren().removeIf(node -> node instanceof Rectangle);
+        for (int[] point : res)
+        {
+            PauseTransition pause=new PauseTransition(Duration.millis(10));
+            Rectangle rect=new Rectangle(point[0]*SCALE, point[1]*SCALE, 1, 1);
+            rect.setFill(Color.RED);
+            rect.setStrokeWidth(0);
+
+            pause.setOnFinished(event -> {imagePane.getChildren().add(rect);});
+            sequence.getChildren().add(pause);
+        }
+        sequence.playFromStart();
+    }
+
+    private void visualizeShortestPath(List<Integer> path)
     {
         SequentialTransition sequence=new SequentialTransition();
         imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
