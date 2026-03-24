@@ -26,7 +26,7 @@ public class Vertex {
         setPosX(0);
         setPosY(0);
         setId(8888);
-        this.name = "diddy";
+        this.name = "DEFAULT";
         this.neighbors = new LinkedList<>();
         this.branches = new LinkedList<>();
     }
@@ -132,7 +132,7 @@ public class Vertex {
     }
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
         int[] current;
-        HashSet<int[]> bin = new HashSet<>();
+        LinkedList<int[]> bin = new LinkedList<>();
         bin.addAll(wallsAndObjects);
         System.out.println("test1");
         LinkedList<int[]> res = new LinkedList<>();
@@ -177,13 +177,13 @@ public class Vertex {
     }
 
     public LinkedList<Vertex> DFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
-        HashSet<Vertex> bin = new HashSet<>();
+        LinkedList<Vertex> bin = new LinkedList<>();
         LinkedList<Vertex> res = new LinkedList<>();
-        dfsSlave(start, bin,end, res, avoid);
+        dfsHelper(start, bin,end, res, avoid);
         return res;
     }
 
-    public boolean dfsSlave(Vertex v, HashSet<Vertex> bin, Vertex end, LinkedList<Vertex> res, LinkedList<Vertex> avoidSet){
+    public boolean dfsHelper(Vertex v, LinkedList<Vertex> bin, Vertex end, LinkedList<Vertex> res, LinkedList<Vertex> avoidSet){
         if(avoidSet != null) bin.addAll(avoidSet);
         bin.add(v);
         res.add(v);
@@ -191,7 +191,7 @@ public class Vertex {
 
         for(Vertex x : v.getNeighbors()){
             if(!bin.contains(x)){
-                if(dfsSlave(x, bin, end, res, avoidSet)) return true;
+                if(dfsHelper(x, bin, end, res, avoidSet)) return true;
             }
         }
 
