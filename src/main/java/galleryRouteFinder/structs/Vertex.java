@@ -188,9 +188,9 @@ public class Vertex {
         Vertex[] prev=new Vertex[maxVertices+1];
         PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
             if (o1.getValue()<o2.getValue())
-                return -1;
-            else if (o1.getValue()>o2.getValue())
                 return 1;
+            else if (o1.getValue()>o2.getValue())
+                return -1;
             return 0;
         });
         queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
