@@ -1,4 +1,4 @@
-package galleryRouteFinder.main;
+package galleryRouteFinder.controllers;
 
 import galleryRouteFinder.structs.Edge;
 import galleryRouteFinder.structs.Vertex;
@@ -8,7 +8,6 @@ import javafx.animation.SequentialTransition;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -17,11 +16,8 @@ import javafx.scene.shape.Circle;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
-import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.*;
-import java.io.File;
-import java.io.IOException;
 
 public class MainController {
     //Front end
@@ -29,10 +25,11 @@ public class MainController {
     public ImageView imageView;
     public AnchorPane imagePane;
     public Button shortestPathToggle;
+    public Label warningLabel;
 
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
-    private boolean shortestPathAlgorithm=false; //True=Dijkstra, false=bfs,
+    private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
 
     ArrayList <Vertex> vertices=new ArrayList <>();
     ArrayList <Edge> edges=new ArrayList <>();
@@ -137,62 +134,22 @@ public class MainController {
 
     public void shortestPath()
     {
-        ArrayList <Integer> res=new ArrayList<>();
-        if (shortestPathAlgorithm) //Diji
+        if (Utils.checkStringInvalidInteger(startingRoom.getText()) || Utils.checkStringInvalidInteger(endingRoom.getText()))
         {
-            res=findShortestPathDijkstra();
+            warningLabel.setText("The input/output room must be a number");
+            return;
         }
+        int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
+        Vertex startV = getVertex(startId), endV = getVertex(endId);
+        ArrayList <Integer> res=new ArrayList<>();
+        ArrayList <Integer> excluded=null, included=null;
+        if (shortestPathAlgorithm) //Diji
+            res=Vertex.dijkstraShortestPath(startV, endV, 25, excluded, included); //25 -> vertices.length
         else {
-            int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
-            Vertex startV = getVertex(startId), endV = getVertex(endId);
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
         visualizePath(res);
-    }
-
-    private ArrayList<Integer> findShortestPathDijkstra()
-    {
-        //TODO Add validation
-        int startId=Integer.parseInt(startingRoom.getText()), endId=Integer.parseInt(endingRoom.getText());
-        boolean[] visited=new boolean[25];
-        Vertex[] prev=new Vertex[25]; //vertices.size()
-        Vertex startVertex=getVertex(startId), endVertex=getVertex(endId);
-        PriorityQueue <Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
-            if (o1.getValue()<o2.getValue())
-                return -1;
-            else if (o1.getValue()>o2.getValue())
-                return 1;
-            return 0;
-        });
-        queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
-
-        while (!queue.isEmpty())
-        {
-            Pair<Pair<Vertex, Vertex>, Double> pair=queue.poll();
-            Vertex currentVertex=pair.getKey().getValue();
-            Vertex prevVertex=pair.getKey().getKey();
-            double cost=pair.getValue();
-            visited[currentVertex.getId()]=true;
-            prev[currentVertex.getId()]=prevVertex;
-            if (currentVertex.equals(endVertex))
-                break;
-            for (Edge edge: currentVertex.getBranches())
-                for (Vertex tmp: edge.getNodes())
-                    if (!tmp.equals(currentVertex) && !visited[tmp.getId()])
-                        queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
-        }
-        ArrayList <Integer> path=new ArrayList<>();
-        while (!endVertex.equals(startVertex))
-        {
-            path.add(endVertex.getId());
-            endVertex=prev[endVertex.getId()];
-        }
-        path.add(startVertex.getId());
-        ArrayList<Integer> res=new ArrayList<>();
-        for (int i=path.size()-1; i>=0; i--)
-            res.add(path.get(i));
-        return res;
     }
 
     private void visualizePath(List<Integer> path)

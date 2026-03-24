@@ -1,11 +1,9 @@
-package galleryRouteFinder.main;
+package galleryRouteFinder.controllers;
 
 import galleryRouteFinder.structs.Vertex;
-import javafx.collections.ObservableList;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 
 public class IncludeExcludeController {
     //Front end

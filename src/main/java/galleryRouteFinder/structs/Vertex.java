@@ -1,8 +1,8 @@
 package galleryRouteFinder.structs;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
+import javafx.util.Pair;
+
+import java.util.*;
 
 public class Vertex {
     private int posX;
@@ -176,6 +176,50 @@ public class Vertex {
             }
         }
 
+        return res;
+    }
+
+    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, int maxVertices, ArrayList <Integer> excluded, ArrayList<Integer> included)
+    {
+        boolean[] visited=new boolean[maxVertices+1];
+        if (excluded!=null)
+            for (int i : excluded)
+                visited[i]=true;
+        Vertex[] prev=new Vertex[maxVertices+1];
+        PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
+            if (o1.getValue()<o2.getValue())
+                return -1;
+            else if (o1.getValue()>o2.getValue())
+                return 1;
+            return 0;
+        });
+        queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
+
+        while (!queue.isEmpty())
+        {
+            Pair<Pair<Vertex, Vertex>, Double> pair=queue.poll();
+            Vertex currentVertex=pair.getKey().getValue();
+            Vertex prevVertex=pair.getKey().getKey();
+            double cost=pair.getValue();
+            visited[currentVertex.getId()]=true;
+            prev[currentVertex.getId()]=prevVertex;
+            if (currentVertex.equals(endVertex))
+                break;
+            for (Edge edge: currentVertex.getBranches())
+                for (Vertex tmp: edge.getNodes())
+                    if (!tmp.equals(currentVertex) && !visited[tmp.getId()])
+                        queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
+        }
+        ArrayList <Integer> path=new ArrayList<>();
+        while (!endVertex.equals(startVertex))
+        {
+            path.add(endVertex.getId());
+            endVertex=prev[endVertex.getId()];
+        }
+        path.add(startVertex.getId());
+        ArrayList<Integer> res=new ArrayList<>();
+        for (int i=path.size()-1; i>=0; i--)
+            res.add(path.get(i));
         return res;
     }
 
