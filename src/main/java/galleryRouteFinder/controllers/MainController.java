@@ -65,12 +65,12 @@ public class MainController {
                 clickedOnce=false;
             }
         });
-        imageView.setImage(new Image("map.jpg"));
+        imageView.setImage(new Image("images/map.jpg"));
     }
 
     public void getVertices()
     {
-        InputStream is = getClass().getResourceAsStream("/vertices.csv");
+        InputStream is = getClass().getResourceAsStream("/csv/vertices.csv");
         int skips=1;
         Scanner read=new Scanner(is);
         while (read.hasNextLine())
@@ -105,7 +105,7 @@ public class MainController {
 
     public void getEdges()
     {
-        InputStream is = getClass().getResourceAsStream("/edges.csv");
+        InputStream is = getClass().getResourceAsStream("/csv/edges.csv");
         int skips=1;
         Scanner read=new Scanner(is);
         while (read.hasNextLine())
@@ -222,7 +222,7 @@ public class MainController {
         Stage stage=new Stage();
         Scene scene;
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/includeExclude.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/includeExclude.fxml"));
             scene = new Scene(loader.load());
             IncludeExcludeController controller=loader.getController();
             controller.vertices=vertices;
