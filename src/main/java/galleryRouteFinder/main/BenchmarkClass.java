@@ -55,8 +55,11 @@ public class BenchmarkClass {
 
     @Benchmark
     public void dijkstraShortestPath(Blackhole bh) {
-        ArrayList <Integer> tmp=Vertex.dijkstraShortestPath(vertices.getFirst(), vertices.getLast(), maxNodes, null, null);
-        bh.consume(tmp);
+        ArrayList <Vertex> tmp=new ArrayList <>();
+        tmp.add(vertices.getFirst());
+        tmp.add(vertices.getLast());
+        ArrayList <Integer> res=Vertex.inclusiveDijkstra(tmp, null);
+        bh.consume(res);
     }
 
     //TODO Benchmark the BFS

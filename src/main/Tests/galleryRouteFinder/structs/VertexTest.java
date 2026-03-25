@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -185,13 +186,11 @@ class VertexTest {
         List<Integer> BFSRes = new ArrayList<>();
         for (Vertex v : result) BFSRes.add(v.getId());
 
-        ArrayList <Integer> dijkstraRes = Vertex.dijkstraShortestPath(a, k, 12, null, null);
-        System.out.println(dijkstraRes.size() + "----" + BFSRes.size());
-        for(int i : dijkstraRes)System.out.println(i);
-        System.out.println("tttt");
-        for(int i : BFSRes) System.out.println(i);
+        ArrayList <Vertex> tmp=new ArrayList <>();
+        tmp.add(a);
+        tmp.add(k);
+        ArrayList <Integer> dijkstraRes = Vertex.inclusiveDijkstra(tmp, null);
         for (int i = 0; i < dijkstraRes.size(); i++) {
-            System.out.println(dijkstraRes.get(i) + "    -     res 1");
             assertSame(dijkstraRes.get(i), BFSRes.get(i));
         }
     }

@@ -189,13 +189,13 @@ public class Vertex {
     public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded) {
         ArrayList <Integer> res=new ArrayList<>();
         for (int i=0; i<included.size()-1; i++){
-            ArrayList<Integer> temp=dijkstraShortestPath(included.get(i), included.get(i+1), excluded);
+            ArrayList<Integer> temp=dijkstra(included.get(i), included.get(i+1), excluded);
             res.addAll(temp);
         }
         return res;
     }
 
-    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, ArrayList <Integer> excluded)
+    public static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList <Integer> excluded)
     {
         HashMap <Integer, Boolean> visited = new HashMap<>();
         if (excluded!=null)
