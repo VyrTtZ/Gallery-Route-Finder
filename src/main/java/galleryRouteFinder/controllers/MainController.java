@@ -12,6 +12,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -51,6 +52,14 @@ public class MainController {
         shortestPathToggle.setOnAction(e->{
             shortestPathAlgorithm=!shortestPathAlgorithm;
             shortestPathToggle.setText(shortestPathAlgorithm? "Dijkstra":"BFS");
+        });
+        startingRoom.setOnKeyPressed(e->{
+            if (e.getCode()== KeyCode.ENTER)
+                shortestPath();
+        });
+        endingRoom.setOnKeyPressed(e->{
+            if (e.getCode()== KeyCode.ENTER)
+                shortestPath();
         });
         imageView.setOnMouseClicked(e->{
             if (drawing)
@@ -266,7 +275,7 @@ public class MainController {
             pause.setOnFinished(event -> {imagePane.getChildren().add(rect);});
             sequence.getChildren().add(pause);
         }
-        PauseTransition tmp =new PauseTransition(Duration.millis(0));
+        PauseTransition tmp =new PauseTransition(Duration.millis(10));
         tmp.setOnFinished(e -> drawing=false);
         sequence.getChildren().add(tmp);
         sequence.playFromStart();
@@ -294,8 +303,10 @@ public class MainController {
             circleDraw.setOnFinished(event -> {imagePane.getChildren().addAll(circle, label);});
             sequence.getChildren().add(circleDraw);
         }
-        PauseTransition tmp =new PauseTransition(Duration.millis(0));
-        tmp.setOnFinished(e -> drawing=false);
+        PauseTransition tmp =new PauseTransition(Duration.millis(10));
+        tmp.setOnFinished(e -> {
+            drawing=false;
+        });
         sequence.getChildren().add(tmp);
         sequence.playFromStart();
     }
