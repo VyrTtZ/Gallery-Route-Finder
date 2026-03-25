@@ -22,6 +22,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class MainController {
@@ -38,8 +39,10 @@ public class MainController {
     private boolean clickedOnce=false, drawing=false;
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
 
-    ArrayList <Vertex> vertices=new ArrayList <>();
-    ArrayList <Edge> edges=new ArrayList <>();
+    private ArrayList <Vertex> vertices=new ArrayList <>();
+    private ArrayList <Edge> edges=new ArrayList <>();
+    private ArrayList <Vertex> included=new ArrayList <>();
+    private ArrayList <Integer> excluded=new ArrayList <>();
 
     public void initialize()
     {
@@ -179,8 +182,6 @@ public class MainController {
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         ArrayList <Integer> res=new ArrayList<>();
-        ArrayList <Integer> excluded=null;
-        ArrayList <Vertex> included=new ArrayList<>();
         included.add(endV);
         included.addFirst(startV);
         if (shortestPathAlgorithm) //Diji
@@ -189,6 +190,8 @@ public class MainController {
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
+        included.remove(startV);
+        included.remove(endV);
         visualizeShortestPath(res);
     }
 
@@ -228,14 +231,23 @@ public class MainController {
             scene = new Scene(loader.load());
             IncludeExcludeController controller=loader.getController();
             controller.setIdsAndVertices(vertices);
+            stage.setScene(scene);
+            stage.setTitle("Include, Exclude View");
+            stage.setOnCloseRequest(e -> {
+                HashMap <Integer, String> states=controller.getStates();
+                included=new ArrayList<>();
+                excluded=new ArrayList<>();
+                for (Vertex vertex : vertices)
+                {
+                    if (states.get(vertex.getId()).equals("Included"))
+                        included.add(vertex);
+                    else if (states.get(vertex.getId()).equals("Excluded"))
+                        excluded.add(vertex.getId());
+                }
+            });
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        stage.setScene(scene);
-        stage.setTitle("Include, Exclude View");
-        stage.setOnCloseRequest(e -> {
-            //TODO pass back included, excluded data.
-        });
         stage.show();
     }
 

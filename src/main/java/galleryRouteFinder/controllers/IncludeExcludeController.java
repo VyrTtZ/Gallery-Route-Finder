@@ -77,6 +77,10 @@ public class IncludeExcludeController {
         }
     }
 
+    public HashMap <Integer, String> getStates(){
+        return states;
+    }
+
     private int getIdFromInfo(String s) //Specifically only for this class
     {
         int i=4, num=0;
