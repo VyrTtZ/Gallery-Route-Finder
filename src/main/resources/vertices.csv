@@ -1,63 +1,63 @@
 ﻿Room_id,x,y,name
-2,797,704,"Power, Patronage and Politics"
-4,728,704,The Spectacle of Portaiture
-5,728,612, City and Court
-6,653,704,"Design, Colour and Invention"
-7,596,749,Paintings for the Home: Italian
-8,527,691,Titian
-9,528,528,Radical Innovation and Rivalry
-10,643,528,Devortion by Design: Italian alterpieces
-11,728,528,Portraits of Women
-12,810,528,The Triumphs of Caesar
-14,726,450,Intellectual Pursuits: Painting at the North Italian Courts
-150,523,346,15a Fine Painters
-15,559,368,Artists inspiring Artists
-16,489,396,A New Art for a New Nation: A Dutch Painting
-17,489,346,Modern Subjects: Dutch Painting
-170,503,309,17a Deceiving the Eye: Dutch Perspective around 1650
-18,559,263,Peter Paul Rubens
-19,441,259,Land and Water
-20,441,210,A Different View of Flanders
-21,441,160,Anthony Van Dyke
-22,677,161,Rembrandt
-23,675,213,The  Cradle of Dutch Painting
-24,677,214,International Ambitions
-25,731,260,Still Life
-26,626,306,Intimate Baroque
-27,678,306,The Italinate Landscape
-28,729,306,Flowers: Dutch and Flemish
-29,729,261,Making Paris a New Rome
-30,940,366,Power and Piety
-31,940,289,Charles I and Henrietta Maria
-32,1160,368,Baroque Splendour
-33,1333,368,City of Pleasure
-34,1333,368,A Distinct Style
-35,1332,530,Rococo to Revolution
-36,1160,530,Claude and Turner
-37,1160,444,The International 18th Century
-38,1077,530,The Academy
-39,1009,530,Capturing the Landscape
-40,1160,612,"Turner, Constable and Corot"
-41,1333,704,Early Impressionism
-42,1291,751,Pastels
-43,1234,707,"Van Gogh, Gaugin and Impressionism"
-44,1160,707,Post-Impressionism
-45,1094,707,New Energies
-46,1011,741,Claude Monet
-510,165,463,51a The Burlington House Cartoon
-51,177,525,The Wonder of Art
-52,187,590,Creating Illusion
-53,187,645,Divine Encounters
-54,236,707,Northern European Painting
-55,225,768,Lines of Expression
-56,202,823,Looking at Nature
-57,121,768,Wonders of Design
-58,121,707,Lyrical Narrative
-59,121,651,Architecture and Illiusion
-60,121,525,Ambition and Innovation
-61,54,525,Shaping the Renaissance Ideal
-62,54,593,The Family Palace
-63,54,651,Le Serinissima
-64,54,725,Gold
-65,79,768,Piety and Passion
-66,79,811,Piero della Francesca
+2,797,704,Power, Patronage and Politics,Rennaissance (1500-1600)
+4,728,704,The Spectacle of Portaiture,Rennaissance (1500-1600)
+5,728,612,City and Court,Rennaissance (1500-1600)
+6,653,704,Design, Colour and Invention,Rennaissance (1500-1600)
+7,596,749,Paintings for the Home: Italian,Rennaissance (1500-1600)
+8,527,691,Titian,Rennaissance (1500-1600)
+9,528,528,Radical Innovation and Rivalry,Rennaissance (1500-1600)
+10,643,528,Devortion by Design: Italian alterpieces,Rennaissance (1500-1600)
+11,728,528,Portraits of Women,Rennaissance (1500-1600)
+12,810,528,The Triumphs of Caesar,Rennaissance (1500-1600)
+14,726,450,Intellectual Pursuits: Painting at the North Italian Courts,Rennaissance (1500-1600)
+150,523,346,15a Fine Painters,Baroque (1600-1700)
+15,559,368,Artists inspiring Artists,Baroque (1600-1700)
+16,489,396,A New Art for a New Nation: A Dutch Painting,Baroque (1600-1700)
+17,489,346,Modern Subjects: Dutch Painting,Baroque (1600-1700)
+170,503,309,17a Deceiving the Eye: Dutch Perspective around 1650,Baroque (1600-1700)
+18,559,263,Peter Paul Rubens,Baroque (1600-1700)
+19,441,259,Land and Water,Baroque (1600-1700)
+20,441,210,A Different View of Flanders,Baroque (1600-1700)
+21,441,160,Anthony Van Dyke,Baroque (1600-1700)
+22,677,161,Rembrandt,Baroque (1600-1700)
+23,675,213,The  Cradle of Dutch Painting,Baroque (1600-1700)
+24,677,214,International Ambitions,Baroque (1600-1700)
+25,731,260,Still Life,Baroque (1600-1700)
+26,626,306,Intimate Baroque,Baroque (1600-1700)
+27,678,306,The Italinate Landscape,Baroque (1600-1700)
+28,729,306,Flowers: Dutch and Flemish,Baroque (1600-1700)
+29,729,261,Making Paris a New Rome,Baroque (1600-1700)
+30,940,366,Power and Piety,Baroque (1600-1700)
+31,940,289,Charles I and Henrietta Maria,Baroque (1600-1700)
+32,1160,368,Baroque Splendour,Baroque (1600-1700)
+33,1333,368,City of Pleasure,Rococo to Romanticism (1700-1800)
+34,1333,368,A Distinct Style,Rococo to Romanticism  (1700-1800)
+35,1332,530,Rococo to Revolution,Rococo to Romanticism  (1700-1800)
+36,1160,530,Claude and Turner,Rococo to Romanticism  (1700-1800)
+37,1160,444,The International 18th Century,Rococo to Romanticism  (1700-1800)
+38,1077,530,The Academy,Towards Modernism (After 1800)
+39,1009,530,Capturing the Landscape,Towards Modernism (After 1800)
+40,1160,612,"Turner, Constable and Corot",Towards Modernism (After 1800)
+41,1333,704,Early Impressionism,Towards Modernism (After 1800)
+42,1291,751,Pastels,Towards Modernism (After 1800)
+43,1234,707,"Van Gogh, Gaugin and Impressionism",Towards Modernism (After 1800)
+44,1160,707,Post-Impressionism,Towards Modernism (After 1800)
+45,1094,707,New Energies,Towards Modernism (After 1800)
+46,1011,741,Claude Monet,Towards Modernism (After 1800)
+510,165,463,51a The Burlington House Cartoon,Medieval and Early Renaissance (1260-1550)
+51,177,525,The Wonder of Art,Medieval and Early Renaissance (1260-1550)
+52,187,590,Creating Illusion,Medieval and Early Renaissance (1260-1550)
+53,187,645,Divine Encounters,Medieval and Early Renaissance (1260-1550)
+54,236,707,Northern European Painting,Medieval and Early Renaissance (1260-1550)
+55,225,768,Lines of Expression,Medieval and Early Renaissance (1260-1550)
+56,202,823,Looking at Nature,Medieval and Early Renaissance (1260-1550)
+57,121,768,Wonders of Design,Medieval and Early Renaissance (1260-1550)
+58,121,707,Lyrical Narrative,Medieval and Early Renaissance (1260-1550)
+59,121,651,Architecture and Illiusion,Medieval and Early Renaissance (1260-1550)
+60,121,525,Ambition and Innovation,Medieval and Early Renaissance (1260-1550)
+61,54,525,Shaping the Renaissance Ideal,Medieval and Early Renaissance (1260-1550)
+62,54,593,The Family Palace,Medieval and Early Renaissance (1260-1550)
+63,54,651,Le Serinissima,Medieval and Early Renaissance (1260-1550)
+64,54,725,Gold,Medieval and Early Renaissance (1260-1550)
+65,79,768,Piety and Passion,Medieval and Early Renaissance (1260-1550)
+66,79,811,Piero della Francesca,Medieval and Early Renaissance (1260-1550)
