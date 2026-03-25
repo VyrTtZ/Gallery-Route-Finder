@@ -5,7 +5,8 @@ import galleryRouteFinder.structs.Vertex;
 import galleryRouteFinder.utilities.Utils;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
-import javafx.scene.PointLight;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -15,9 +16,11 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.Pair;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -32,7 +35,7 @@ public class MainController {
     //Back end
     private static final double SCALE=0.7; //Scale of the map in the program
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
-    private boolean clickedOnce=false;
+    private boolean clickedOnce=false, drawing=false;
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
 
     ArrayList <Vertex> vertices=new ArrayList <>();
@@ -47,6 +50,8 @@ public class MainController {
             shortestPathToggle.setText(shortestPathAlgorithm? "Dijkstra":"BFS");
         });
         imageView.setOnMouseClicked(e->{
+            if (drawing)
+                return;
             int tmpX=(int)e.getX(), tmpY=(int)e.getY();
             if (!clickedOnce)
             {
@@ -57,6 +62,7 @@ public class MainController {
             else
             {
                 bfsPixelPath(tmpX, tmpY);
+                clickedOnce=false;
             }
         });
         imageView.setImage(new Image("map.jpg"));
@@ -65,7 +71,7 @@ public class MainController {
     public void getVertices()
     {
         InputStream is = getClass().getResourceAsStream("/vertices.csv");
-        int skips=3;
+        int skips=1;
         Scanner read=new Scanner(is);
         while (read.hasNextLine())
         {
@@ -100,7 +106,7 @@ public class MainController {
     public void getEdges()
     {
         InputStream is = getClass().getResourceAsStream("/edges.csv");
-        int skips=3;
+        int skips=1;
         Scanner read=new Scanner(is);
         while (read.hasNextLine())
         {
@@ -117,6 +123,8 @@ public class MainController {
             {
                 String tmp=Utils.commaStringExtraction(line, start);
                 start+=tmp.length()+1;
+                if (Utils.checkStringInvalidInteger(tmp))
+                    break;
                 int data=Integer.parseInt(tmp);
                 if (i==0)
                     edge.setNode1(getVertex(data));
@@ -164,6 +172,8 @@ public class MainController {
             warningLabel.setText("The input/output room must be a number");
             return;
         }
+        if (drawing)
+            return;
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         ArrayList <Integer> res=new ArrayList<>();
@@ -182,11 +192,14 @@ public class MainController {
 
     public void interestingPath()
     {
-
+        if (drawing)
+            return;
     }
 
     public void bfsPixelPath(int secondX, int secondY)
     {
+        if (drawing)
+            return;
         int[] start=new int[2];
         int[] end=new int[2];
         start[0]=firstCoords.getKey();
@@ -204,10 +217,29 @@ public class MainController {
         visualizePixelPath(res);
     }
 
+    public void switchIncludeExcludeView()
+    {
+        Stage stage=new Stage();
+        Scene scene;
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/includeExclude.fxml"));
+            scene = new Scene(loader.load());
+            IncludeExcludeController controller=loader.getController();
+            controller.vertices=vertices;
+            controller.populateData();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.setScene(scene);
+        stage.setTitle("Include, Exclude View");
+        stage.show();
+    }
+
     private void visualizePixelPath(LinkedList<int[]> res)
     {
         SequentialTransition sequence=new SequentialTransition();
         imagePane.getChildren().removeIf(node -> node instanceof Rectangle);
+        drawing=true;
         for (int[] point : res)
         {
             PauseTransition pause=new PauseTransition(Duration.millis(10));
@@ -218,6 +250,9 @@ public class MainController {
             pause.setOnFinished(event -> {imagePane.getChildren().add(rect);});
             sequence.getChildren().add(pause);
         }
+        PauseTransition tmp =new PauseTransition(Duration.millis(0));
+        tmp.setOnFinished(e -> drawing=false);
+        sequence.getChildren().add(tmp);
         sequence.playFromStart();
     }
 
@@ -225,6 +260,7 @@ public class MainController {
     {
         SequentialTransition sequence=new SequentialTransition();
         imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
+        drawing=true;
         for (Integer integer : path) {
             PauseTransition circleDraw = new PauseTransition(Duration.millis(200));
             Circle circle = new Circle();
@@ -242,6 +278,9 @@ public class MainController {
             circleDraw.setOnFinished(event -> {imagePane.getChildren().addAll(circle, label);});
             sequence.getChildren().add(circleDraw);
         }
+        PauseTransition tmp =new PauseTransition(Duration.millis(0));
+        tmp.setOnFinished(e -> drawing=false);
+        sequence.getChildren().add(tmp);
         sequence.playFromStart();
     }
 

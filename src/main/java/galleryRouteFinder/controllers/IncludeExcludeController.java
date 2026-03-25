@@ -5,19 +5,23 @@ import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
+import java.util.ArrayList;
+
 public class IncludeExcludeController {
     //Front end
-    ListView <Vertex> listView=new ListView<>();
+    public ListView <Vertex> listView=new ListView<>();
 
     //Back end
-
+    public ArrayList<Vertex> vertices=new ArrayList<>();
 
     public void initialize(){
         listView.setCellFactory(lv -> new RoomCell());
     }
 
     public void populateData(){
-        //TODO Populate stuff
+        for (Vertex v : vertices){
+            listView.getItems().add(v);
+        }
     }
 
     public class RoomCell extends ListCell <Vertex> {

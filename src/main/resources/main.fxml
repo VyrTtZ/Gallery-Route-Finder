@@ -49,7 +49,7 @@
             <Font size="17.0" />
          </font>
       </Label>
-      <Button layoutX="935.0" layoutY="669.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="69.0" text="Set">
+      <Button layoutX="935.0" layoutY="669.0" mnemonicParsing="false" onAction="#switchIncludeExcludeView" prefHeight="38.0" prefWidth="69.0" text="Set">
          <font>
             <Font size="17.0" />
          </font>

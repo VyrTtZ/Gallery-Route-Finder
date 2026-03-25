@@ -195,7 +195,7 @@ public class Vertex {
         return res;
     }
 
-    public static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList <Integer> excluded)
+    private static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList<Integer> excluded)
     {
         HashMap <Integer, Boolean> visited = new HashMap<>();
         if (excluded!=null)
@@ -223,7 +223,7 @@ public class Vertex {
                 break;
             for (Edge edge: currentVertex.getBranches())
                 for (Vertex tmp: edge.getNodes())
-                    if (!tmp.equals(currentVertex) && !visited.get(tmp.getId()))
+                    if (!tmp.equals(currentVertex) && (!visited.containsKey(tmp.getId()) || !visited.get(tmp.getId())))
                         queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
         }
         ArrayList <Integer> path=new ArrayList<>();
