@@ -6,14 +6,14 @@ import galleryRouteFinder.utilities.Utils;
 import javafx.animation.PauseTransition;
 import javafx.animation.SequentialTransition;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -23,22 +23,26 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class MainController {
-    //Front end
-    public TextField startingRoom, endingRoom;
+    ///Front end
+    public TextField startingRoom, endingRoom, maxDFSField;
     public ImageView imageView;
     public AnchorPane imagePane;
     public Button shortestPathToggle;
     public Label warningLabel;
 
-    //Back end
+    ///Back end
+    //Constants
     private static final double SCALE=0.7; //Scale of the map in the program
+    private static final String[] NAMES = new String[]{"Medieval and Early Renaissance (1260-1550)", "Renaissance (1500-1600)",  "Baroque (1600-1700)", "Rococo to Romanticism (1700-1800)", "Towards Modernism (1800+)"};
+
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
     private boolean clickedOnce=false, drawing=false;
+    private double walkWillingness=0;
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
+    private boolean[] artEras=new boolean[5];
 
     private ArrayList <Vertex> vertices=new ArrayList <>();
     private ArrayList <Edge> edges=new ArrayList <>();
@@ -191,23 +195,72 @@ public class MainController {
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         ArrayList <Integer> res=new ArrayList<>();
-        included.add(endV);
-        included.addFirst(startV);
+        boolean containsEnd=included.contains(endV), containsStart=included.contains(startV);
+        if (!containsStart)
+            included.addFirst(startV);
+        if (!containsEnd)
+            included.add(endV);
         if (shortestPathAlgorithm) //Diji
             res = Vertex.inclusiveDijkstra(included, excluded);
         else {
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
-        included.remove(startV);
-        included.remove(endV);
+        if (!containsStart)
+            included.remove(startV);
+        if (!containsEnd)
+            included.remove(endV);
         visualizeShortestPath(res);
     }
 
-    public void interestingPath()
+    public void interestingSettings()
+    {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Route Preferences");
+        alert.setHeaderText("Select your art interests and walking preferences");
+
+        CheckBox[] checkBoxes = new CheckBox[5];
+        for (int i = 0; i < checkBoxes.length; i++)
+        {
+            checkBoxes[i] = new CheckBox(NAMES[i]);
+            checkBoxes[i].setSelected(artEras[i]);
+        }
+
+        Slider slider=new Slider(0, 100, 50);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit(10);
+        slider.setMinorTickCount(0);
+        slider.setSnapToTicks(true);
+        slider.setValue(walkWillingness);
+
+        Label label=new Label("Care about shorter distance x% more:");
+
+        VBox vbox=new VBox(10);
+        for  (CheckBox checkBox : checkBoxes)
+            vbox.getChildren().add(checkBox);
+        vbox.getChildren().addAll(label, slider);
+        vbox.setPadding(new Insets(10));
+        alert.getDialogPane().setContent(vbox);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK)
+        {
+            for (int i=0; i<checkBoxes.length; i++)
+                artEras[i]=checkBoxes[i].isSelected();
+            walkWillingness=slider.getValue();
+        }
+    }
+
+    public void interestingRoute()
     {
         if (drawing)
             return;
+    }
+
+    public void dfsRouting()
+    {
+        //TODO
     }
 
     public void bfsPixelPath(int secondX, int secondY)
@@ -239,20 +292,12 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/includeExclude.fxml"));
             scene = new Scene(loader.load());
             IncludeExcludeController controller=loader.getController();
-            controller.setIdsAndVertices(vertices);
+            controller.setMainController(this);
+            controller.setIdsVerticesAndStates(vertices, included, excluded);
             stage.setScene(scene);
             stage.setTitle("Include, Exclude View");
             stage.setOnCloseRequest(e -> {
-                HashMap <Integer, String> states=controller.getStates();
-                included=new ArrayList<>();
-                excluded=new ArrayList<>();
-                for (Vertex vertex : vertices)
-                {
-                    if (states.get(vertex.getId()).equals("Included"))
-                        included.add(vertex);
-                    else if (states.get(vertex.getId()).equals("Excluded"))
-                        excluded.add(vertex.getId());
-                }
+                updateIncludeExclude(controller.getStates(), controller.getOrderSet(), controller.getVertices());
             });
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -309,6 +354,19 @@ public class MainController {
         });
         sequence.getChildren().add(tmp);
         sequence.playFromStart();
+    }
+
+    public void updateIncludeExclude(HashMap <Integer, String> states, HashSet <Integer> orderSet, HashMap <Integer, Pair <Vertex, Integer>> vertices)
+    {
+        included=new ArrayList<>();
+        excluded=new ArrayList<>();
+        for (Vertex vertex : this.vertices)
+            if (states.get(vertex.getId()).equals("Exclude"))
+                excluded.add(vertex.getId());
+        for (Integer i : orderSet)
+            for (Vertex vertex : this.vertices)
+                if (states.get(vertex.getId()).equals("Include") && vertices.get(vertex.getId()).getValue().equals(i))
+                    included.add(vertex);
     }
 
     private Vertex getVertex(int id)
