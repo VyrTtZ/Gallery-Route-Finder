@@ -96,17 +96,17 @@ public class IncludeExcludeController {
                     int index=vertices.get(vertexId).getValue();
                     if (index==0)
                         return;
-                    Pair <Vertex, Integer> up=new Pair <> (vertices.get(vertexId).getKey(), index-1); //Move up
-                    vertices.put(vertexId, up);
                     for (Integer id: ids)
                     {
-                        if (vertices.get(id).getValue()==index-1)
+                        if (states.get(id).equals("Include") && vertices.get(id).getValue()==index-1)
                         {
                             Pair <Vertex, Integer> temp=new Pair <> (vertices.get(id).getKey(), index); //Move down
                             vertices.put(id, temp);
                             break;
                         }
                     }
+                    Pair <Vertex, Integer> up=new Pair <> (vertices.get(vertexId).getKey(), index-1); //Move up
+                    vertices.put(vertexId, up);
                     populateData();
                 }
                 else {
