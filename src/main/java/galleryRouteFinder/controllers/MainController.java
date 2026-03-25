@@ -167,14 +167,22 @@ public class MainController {
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         ArrayList <Integer> res=new ArrayList<>();
-        ArrayList <Integer> excluded=null, included=null;
+        ArrayList <Integer> excluded=null;
+        ArrayList <Vertex> included=new ArrayList<>();
+        included.add(endV);
+        included.addFirst(startV);
         if (shortestPathAlgorithm) //Diji
-            res=Vertex.dijkstraShortestPath(startV, endV, 25, excluded, included); //25 -> vertices.length
+            res = Vertex.inclusiveDijkstra(included, excluded);
         else {
             LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
             for (Vertex v : path) res.add(v.getId());
         }
         visualizeShortestPath(res);
+    }
+
+    public void interestingPath()
+    {
+
     }
 
     public void bfsPixelPath(int secondX, int secondY)
@@ -191,7 +199,7 @@ public class MainController {
         //TODO fix bfs pixel
 
         LinkedList<int[]> res=Vertex.BFS(start, end, null);
-        for  (int[] v : res)
+        for (int[] v : res)
             System.out.println(v[0]+","+v[1]);
         visualizePixelPath(res);
     }

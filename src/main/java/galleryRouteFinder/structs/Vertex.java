@@ -186,13 +186,22 @@ public class Vertex {
         return res;
     }
 
-    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, int maxVertices, ArrayList <Integer> excluded, ArrayList<Integer> included)
+    public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded) {
+        ArrayList <Integer> res=new ArrayList<>();
+        for (int i=0; i<included.size()-1; i++){
+            ArrayList<Integer> temp=dijkstraShortestPath(included.get(i), included.get(i+1), excluded);
+            res.addAll(temp);
+        }
+        return res;
+    }
+
+    public static ArrayList<Integer> dijkstraShortestPath(Vertex startVertex, Vertex endVertex, ArrayList <Integer> excluded)
     {
-        boolean[] visited=new boolean[maxVertices+1];
+        HashMap <Integer, Boolean> visited = new HashMap<>();
         if (excluded!=null)
             for (int i : excluded)
-                visited[i]=true;
-        Vertex[] prev=new Vertex[maxVertices+1];
+                visited.put(i, true);
+        HashMap <Integer, Vertex> prev = new HashMap<>();
         PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
             if (o1.getValue()<o2.getValue())
                 return -1;
@@ -208,20 +217,20 @@ public class Vertex {
             Vertex currentVertex=pair.getKey().getValue();
             Vertex prevVertex=pair.getKey().getKey();
             double cost=pair.getValue();
-            visited[currentVertex.getId()]=true;
-            prev[currentVertex.getId()]=prevVertex;
+            visited.put(currentVertex.getId(), true);
+            prev.put(currentVertex.getId(), prevVertex);
             if (currentVertex.equals(endVertex))
                 break;
             for (Edge edge: currentVertex.getBranches())
                 for (Vertex tmp: edge.getNodes())
-                    if (!tmp.equals(currentVertex) && !visited[tmp.getId()])
+                    if (!tmp.equals(currentVertex) && !visited.get(tmp.getId()))
                         queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
         }
         ArrayList <Integer> path=new ArrayList<>();
         while (!endVertex.equals(startVertex))
         {
             path.add(endVertex.getId());
-            endVertex=prev[endVertex.getId()];
+            endVertex=prev.get(endVertex.getId());
         }
         path.add(startVertex.getId());
         ArrayList<Integer> res=new ArrayList<>();
