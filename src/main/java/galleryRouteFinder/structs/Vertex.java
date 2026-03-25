@@ -1,5 +1,6 @@
 package galleryRouteFinder.structs;
 
+import javafx.scene.image.Image;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -7,17 +8,19 @@ import java.util.*;
 public class Vertex {
     private int posX;
     private int posY;
-    private String name;
+    private String name, category;
     private LinkedList<Vertex> neighbors;
     private LinkedList<Edge> branches;
+    private Image image;
     private int id = 0;
     private static int nextId = 1;
 
-    public Vertex(int id, int posX, int posY, String name) {
+    public Vertex(int id, int posX, int posY, String name, String category, Image image) {
         setPosX(posX);
         setPosY(posY);
         setId(id);
-        this.name = name;
+        setName(name);
+        setCategory(category);
         this.neighbors = new LinkedList<>();
         this.branches = new LinkedList<>();
     }
@@ -26,9 +29,27 @@ public class Vertex {
         setPosX(0);
         setPosY(0);
         setId(8888);
+        image=null;
+        category="DEFAULT";
         this.name = "DEFAULT";
         this.neighbors = new LinkedList<>();
         this.branches = new LinkedList<>();
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
     }
 
     public int getPosX() {

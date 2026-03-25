@@ -65,7 +65,7 @@ public class MainController {
                 clickedOnce=false;
             }
         });
-        imageView.setImage(new Image("images/map.jpg"));
+        imageView.setImage(new Image(getClass().getResourceAsStream("/images/map.jpg")));
     }
 
     public void getVertices()
@@ -81,24 +81,26 @@ public class MainController {
                 skips--;
                 continue;
             }
-            //Format: ID, x, y, name
+            //Format: ID, x, y, category, name
             int start=0;
             Vertex vertex=new Vertex();
-            for (int i=0; i<4; i++)
+            for (int i=0; i<5; i++)
             {
                 String tmp=Utils.commaStringExtraction(line, start);
                 int data=0;
-                if (i!=3)
+                if (i<3)
                     data=Integer.parseInt(tmp);
                 switch (i)
                 {
                     case 0 -> vertex.setId(data);
                     case 1 -> vertex.setPosX(data);
                     case 2 -> vertex.setPosY(data);
-                    case 3 -> vertex.setName(line.substring(start, line.length()-1));
+                    case 3 -> vertex.setCategory(tmp);
+                    case 4 -> vertex.setName(line.substring(start));
                 }
                 start+=tmp.length()+1;
             }
+            vertex.setImage(new Image(getClass().getResourceAsStream("/images/"+vertex.getId()+".jpg")));
             vertices.add(vertex);
         }
     }
@@ -225,13 +227,15 @@ public class MainController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/includeExclude.fxml"));
             scene = new Scene(loader.load());
             IncludeExcludeController controller=loader.getController();
-            controller.vertices=vertices;
-            controller.populateData();
+            controller.setIdsAndVertices(vertices);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
         stage.setScene(scene);
         stage.setTitle("Include, Exclude View");
+        stage.setOnCloseRequest(e -> {
+            //TODO pass back included, excluded data.
+        });
         stage.show();
     }
 

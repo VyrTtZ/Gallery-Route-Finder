@@ -38,7 +38,7 @@ public class BenchmarkClass {
             }
             while (coords.contains(new Pair<>(x, y)));
             coords.add(new Pair<>(x, y));
-            vertices.add(new Vertex(i, x, y, ""));
+            vertices.add(new Vertex(i, x, y, "", "", null));
         }
         for (int i=0; i<vertices.size(); i++) {
             for (int j=1; j<=Math.min(maxNeighbors, vertices.size()-i-1); j++) {

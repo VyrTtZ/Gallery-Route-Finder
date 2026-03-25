@@ -17,17 +17,17 @@ class VertexTest {
 
     @BeforeEach
     void setUp() {
-         a = new Vertex(1, 0, 0, "A");
-        b = new Vertex(2, 1, 2, "B");
-        c = new Vertex(3, 2, 1, "C");
-        d = new Vertex(4, 3, 3, "D");
-        e = new Vertex(5, 4, 0, "E");
-        f = new Vertex(6, 2, 4, "F");
-        g = new Vertex(7, 5, 2, "G");
-        h = new Vertex(8, 6, 1, "H");
-        i = new Vertex(9, 3, 1, "I");
-        j = new Vertex(10, 4, 3, "J");
-        k = new Vertex(11, 5, 4, "K");
+         a = new Vertex(1, 0, 0, "A", "",  null);
+        b = new Vertex(2, 1, 2, "B", "",  null);
+        c = new Vertex(3, 2, 1, "C", "",  null);
+        d = new Vertex(4, 3, 3, "D", "",  null);
+        e = new Vertex(5, 4, 0, "E", "",  null);
+        f = new Vertex(6, 2, 4, "F", "",  null);
+        g = new Vertex(7, 5, 2, "G", "",  null);
+        h = new Vertex(8, 6, 1, "H", "",  null);
+        i = new Vertex(9, 3, 1, "I", "",  null);
+        j = new Vertex(10, 4, 3, "J", "",  null);
+        k = new Vertex(11, 5, 4, "K", "",  null);
 
         a.addNeighbor(b);
         a.addNeighbor(c);
