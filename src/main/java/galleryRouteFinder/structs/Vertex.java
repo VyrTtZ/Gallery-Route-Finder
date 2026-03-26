@@ -124,6 +124,26 @@ public class Vertex {
 
     }
 
+    public static int BFS(Vertex start) {
+        Queue<Vertex> agenda = new LinkedList<>();
+        LinkedList<Vertex> visited = new LinkedList<>();
+
+        agenda.add(start);
+        visited.add(start);
+
+        while (!agenda.isEmpty()) {
+            Vertex current = agenda.poll();
+
+            for (Vertex neighbor : current.getNeighbors()) {
+                if (!visited.contains(neighbor)) {
+                    visited.add(neighbor);
+                    agenda.add(neighbor);
+                }
+            }
+        }
+        return visited.size();
+    }
+
     public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid) {
         Queue<LinkedList<Vertex>> agenda = new LinkedList<>();
         LinkedList<Vertex> visited = new LinkedList<>();
@@ -158,36 +178,37 @@ public class Vertex {
         LinkedList<int[]> bin = new LinkedList<>();
         if(wallsAndObjects != null)
             bin.addAll(wallsAndObjects);
-        LinkedList<int[]> res = new LinkedList<>();
-        Queue<LinkedList<int[]>> agenda = new LinkedList<>(new LinkedList<>());
+        LinkedList<int[]> path = new LinkedList<>();
+        Queue<int[]> agenda = new LinkedList<>();
+        HashMap<int[], int[]> parent = new HashMap<>();
 
-        System.out.println("test1");
-
+        parent.put(start, null);
+        agenda.add(start);
         bin.add(start);
-        LinkedList<int[]> current = new LinkedList<>();
-        current.add(start);
 
-        System.out.println("test2");
+
 
         while(!agenda.isEmpty()){
-            current = agenda.poll();
-            int[] currentLast = current.getLast();
+            int[] current = agenda.poll();
 
-
-            if(currentLast == end) {
-                return current;
+            if(current[0] == end[0] && current[1] == end[1]) {
+                int[] back = current;
+                while(back != null) {
+                    path.addFirst(back);
+                    back = parent.get(back);
+                }
+                return path;
             }
             int[][] neighbors = {
-                    {start[0] - 1, start[1] - 1},
-                    {start[0], start[1] - 1},
-                    {start[0] + 1, start[1] - 1},
-                    {start[0] - 1, start[1]},
-                    {start[0] + 1, start[1]},
-                    {start[0] - 1, start[1] + 1},
-                    {start[0], start[1] + 1},
-                    {start[0] + 1, start[1] + 1}
+                    {current[0] - 1, current[1] - 1},
+                    {current[0], current[1] - 1},
+                    {current[0] + 1, current[1] - 1},
+                    {current[0] - 1, current[1]},
+                    {current[0] + 1, current[1]},
+                    {current[0] - 1, current[1] + 1},
+                    {current[0], current[1] + 1},
+                    {current[0] + 1, current[1] + 1}
             };
-
             for(int[] i : neighbors){ // helper bc concModException
                 boolean found = false;
                 for(int[] j : bin){
@@ -198,13 +219,13 @@ public class Vertex {
                 }
                 if(!found){
                     bin.add(i);
-                    current.add(i);
-                    agenda.add(current);
+                    parent.put(i, current);
+                    agenda.add(i);
                 }
             }
         }
 
-        return res;
+        return null;
     }
 
     public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded) {
@@ -260,31 +281,41 @@ public class Vertex {
         return res;
     }
 
-    public LinkedList<Vertex> DFS(Vertex start, Vertex end, LinkedList<Vertex> avoid){
-        LinkedList<Vertex> bin = new LinkedList<>();
-        LinkedList<Vertex> res = new LinkedList<>();
-        if(avoid != null) bin.addAll(avoid);
-        dfsHelper(start, bin,end, res);
-        return res;
-    }
+    public static LinkedList<LinkedList<Vertex>> DFS(Vertex start, Vertex end, LinkedList<Vertex> visited, LinkedList<Vertex> avoid){
 
-    public void dfsHelper(Vertex v, LinkedList<Vertex> bin, Vertex end, LinkedList<Vertex> res){
+        if (start == end) {
+            LinkedList<Vertex> path = new LinkedList<>();
+            path.add(start);
+            LinkedList<LinkedList<Vertex>> result = new LinkedList<>();
+            result.add(path);
+            return result;
+        }
 
-        bin.add(v);
-        res.add(v);
-        if(v == end) return;
 
-        for(Vertex x : v.getNeighbors()){
-            if(!bin.contains(x)){
-                dfsHelper(x, bin, end, res);
-                if (res.getLast() == end)
-                    return;
+        if (visited == null) visited = new LinkedList<>();
+        if(avoid != null)
+            visited.addAll(avoid);
+
+        visited.add(start);
+        LinkedList<LinkedList<Vertex>> res = new LinkedList<>();
+
+        for (Vertex v : start.neighbors) {
+            if (!visited.contains(v)) {
+
+                LinkedList<LinkedList<Vertex>> temp2 = DFS(v, end, visited, avoid);
+                for (LinkedList<Vertex> x : temp2) {
+                    LinkedList<Vertex> tempPath = new LinkedList<>(x);
+                    tempPath.addFirst(start);
+                    res.add(tempPath);
+                    System.out.println(res.size());
+                }
             }
         }
 
-        if(res.getLast() != end) res.removeLast();
 
+        visited.removeLast();
 
+        return res;
     }
 
 

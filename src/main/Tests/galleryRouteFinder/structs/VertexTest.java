@@ -166,15 +166,20 @@ class VertexTest {
 
     @Test
     void DFS() {
-        LinkedList<Vertex> result = a.DFS(a, k, null);
-        for(Vertex v : result) System.out.println(v.getName());
-        assertEquals(a, result.getFirst());
-        assertEquals(result.getLast(), k);
+        LinkedList<LinkedList<Vertex>> result = a.DFS(a, k, null, null);
+        for(LinkedList<Vertex> lv : result){
+            System.out.println("tttttttttt");
+            for(Vertex v : lv){
+                System.out.print(v.getName());
+            }
+        }
+        assertEquals(a, result.getFirst().getFirst());
+        assertEquals(result.getFirst().getLast(), k);
 
 
         LinkedList<Vertex> avoid = new LinkedList<>();
         avoid.add(g);
-        LinkedList<Vertex> avoided = a.DFS(a, c, avoid);
+        LinkedList<Vertex> avoided = a.DFS(a, c, avoid, null).getFirst();
         for(Vertex v : avoided) System.out.println(v.getName());
         assertFalse(avoided.contains(h));
         assertEquals(avoided.getLast(), c);

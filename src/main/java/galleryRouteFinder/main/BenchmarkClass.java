@@ -7,6 +7,7 @@ import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -61,6 +62,10 @@ public class BenchmarkClass {
         ArrayList <Integer> res=Vertex.inclusiveDijkstra(tmp, null);
         bh.consume(res);
     }
+    @Benchmark
+    public void bfsShortestPath(Blackhole bh){
+        LinkedList<Vertex> res = Vertex.BFS(vertices.getFirst(), vertices.getLast(), null);
+        bh.consume(res);
+    }
 
-    //TODO Benchmark the BFS
 }
