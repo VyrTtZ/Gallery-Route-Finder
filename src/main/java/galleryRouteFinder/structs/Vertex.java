@@ -167,6 +167,8 @@ public class Vertex {
         agenda.add(start);
         bin.add(start);
 
+        int counterTesting2 = 0;
+
 
 
         while(!agenda.isEmpty()){
@@ -194,17 +196,26 @@ public class Vertex {
                 boolean found = false;
                 for(int[] j : bin){
                     if(i[0] == j[0] && i[1] == j[1]){
+                        counterTesting2++;
                         found = true;
                         break;
+                    }
+                }
+                for(int[] k : wallsAndObjects){
+                    if(i[0] == k[0] && i[1] == k[1]){
+                        System.out.println("gropious");
                     }
                 }
                 if(!found){
                     bin.add(i);
                     parent.put(i, current);
                     agenda.add(i);
+                    System.out.println("broski" + counterTesting2);
+                    System.out.println(wallsAndObjects.size());
                 }
             }
         }
+
 
         return null;
     }

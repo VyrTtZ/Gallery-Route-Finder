@@ -11,6 +11,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelBuffer;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -23,6 +25,7 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.Buffer;
 import java.util.*;
 
 public class MainController {
@@ -280,10 +283,11 @@ public class MainController {
         System.out.println("start:"+start[0]+","+start[1]+","+end[0]+","+end[1]);
         //TODO fix bfs pixel
 
-        LinkedList<int[]> res=Vertex.BFS(start, end, null);
+        LinkedList<int[]> res=Vertex.BFS(start, end, findWalls());
         for (int[] v : res)
             System.out.println(v[0]+","+v[1]);
-        visualizePixelPath(res);
+//        visualizePixelPath(res);
+        stupidPathShowTestForYobbos(res);
     }
 
     public void switchIncludeExcludeView()
@@ -305,6 +309,13 @@ public class MainController {
             throw new RuntimeException(e);
         }
         stage.show();
+    }
+    private void stupidPathShowTestForYobbos(LinkedList<int[]> path){
+        WritableImage wI = new WritableImage(imageView.getImage().getPixelReader(), (int)imageView.getImage().getWidth(),(int)imageView.getImage().getHeight());
+        for(int[] i : path){
+            wI.getPixelWriter().setColor(i[0], i[1], Color.BLACK);
+        }
+        imageView.setImage(wI);
     }
 
     private void visualizePixelPath(LinkedList<int[]> res)
@@ -379,5 +390,16 @@ public class MainController {
                 return v;
         }
         return null;
+    }
+
+    private LinkedList<int[]> findWalls(){
+        WritableImage wI = new WritableImage(imageView.getImage().getPixelReader(), (int)imageView.getImage().getWidth(),(int)imageView.getImage().getHeight());
+        LinkedList<int[]> res = new LinkedList<>();
+        for(int i = 0; i < imageView.getImage().getHeight(); i++){
+            for(int j = 0; j < imageView.getImage().getWidth(); j++){
+                if(wI.getPixelReader().getColor(j, i).getBrightness() < .9) res.add(new int[]{i, j});
+            }
+        }
+        return res;
     }
 }
