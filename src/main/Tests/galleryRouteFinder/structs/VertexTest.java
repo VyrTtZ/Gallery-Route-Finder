@@ -219,7 +219,7 @@ class VertexTest {
         ArrayList <Vertex> tmp=new ArrayList <>();
         tmp.add(a);
         tmp.add(k);
-        ArrayList <Integer> dijkstraRes = Vertex.inclusiveDijkstra(tmp, null);
+        ArrayList <Integer> dijkstraRes = Vertex.inclusiveDijkstra(tmp, null, -1, null);
         for (int i = 0; i < dijkstraRes.size(); i++) {
             assertSame(dijkstraRes.get(i), BFSRes.get(i));
         }

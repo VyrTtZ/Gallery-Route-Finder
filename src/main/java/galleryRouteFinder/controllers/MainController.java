@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelBuffer;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
@@ -25,7 +24,6 @@ import javafx.util.Pair;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.Buffer;
 import java.util.*;
 
 public class MainController {
@@ -39,13 +37,13 @@ public class MainController {
     ///Back end
     //Constants
     private static final double SCALE=0.7; //Scale of the map in the program
-    private static final String[] NAMES = new String[]{"Medieval and Early Renaissance (1260-1550)", "Renaissance (1500-1600)",  "Baroque (1600-1700)", "Rococo to Romanticism (1700-1800)", "Towards Modernism (1800+)"};
+    public static final String[] NAMES = new String[]{"Temporary Exhibition", "Medieval and Early Renaissance (1260-1550)", "Renaissance (1500-1600)",  "Baroque (1600-1700)", "Rococo to Romanticism (1700-1800)", "Towards Modernism (1800+)"};
 
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
     private boolean clickedOnce=false, drawing=false;
-    private double walkWillingness=0;
+    private double shorterDistance=0;
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
-    private boolean[] artEras=new boolean[5];
+    private boolean[] artEras=new boolean[NAMES.length];
 
     private ArrayList <Vertex> vertices=new ArrayList <>();
     private ArrayList <Edge> edges=new ArrayList <>();
@@ -119,7 +117,7 @@ public class MainController {
                 }
                 start+=tmp.length()+1;
             }
-            vertex.setImage(new Image(getClass().getResourceAsStream("/images/"+vertex.getId()+".jpg")));
+//            vertex.setImage(new Image(getClass().getResourceAsStream("/images/"+vertex.getId()+".jpg")));
             vertices.add(vertex);
         }
     }
@@ -204,7 +202,7 @@ public class MainController {
         if (!containsEnd)
             included.add(endV);
         if (shortestPathAlgorithm) //Diji
-            res = Vertex.inclusiveDijkstra(included, excluded);
+            res = Vertex.inclusiveDijkstra(included, excluded, -1, null);
         else {
             LinkedList<Vertex> excludeLL = new LinkedList<>();
             for(int i : excluded) excludeLL.add(getVertex(i));
@@ -224,7 +222,7 @@ public class MainController {
         alert.setTitle("Route Preferences");
         alert.setHeaderText("Select your art interests and walking preferences");
 
-        CheckBox[] checkBoxes = new CheckBox[5];
+        CheckBox[] checkBoxes = new CheckBox[NAMES.length];
         for (int i = 0; i < checkBoxes.length; i++)
         {
             checkBoxes[i] = new CheckBox(NAMES[i]);
@@ -237,9 +235,9 @@ public class MainController {
         slider.setMajorTickUnit(10);
         slider.setMinorTickCount(0);
         slider.setSnapToTicks(true);
-        slider.setValue(walkWillingness);
+        slider.setValue(shorterDistance);
 
-        Label label=new Label("Care about shorter distance x% more:");
+        Label label=new Label("Care about shorter distance x% less:");
 
         VBox vbox=new VBox(10);
         for  (CheckBox checkBox : checkBoxes)
@@ -253,7 +251,7 @@ public class MainController {
         {
             for (int i=0; i<checkBoxes.length; i++)
                 artEras[i]=checkBoxes[i].isSelected();
-            walkWillingness=slider.getValue();
+            shorterDistance=slider.getValue();
         }
     }
 
@@ -261,6 +259,19 @@ public class MainController {
     {
         if (drawing)
             return;
+        int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
+        Vertex startV = getVertex(startId), endV = getVertex(endId);
+        boolean containsEnd=included.contains(endV), containsStart=included.contains(startV);
+        if (!containsStart)
+            included.addFirst(startV);
+        if (!containsEnd)
+            included.add(endV);
+        ArrayList <Integer> res = Vertex.inclusiveDijkstra(included, excluded, shorterDistance, artEras);
+        if (!containsStart)
+            included.remove(startV);
+        if (!containsEnd)
+            included.remove(endV);
+        visualizeShortestPath(res);
     }
 
     public void dfsRouting()
@@ -286,8 +297,8 @@ public class MainController {
         LinkedList<int[]> res=Vertex.BFS(start, end, findWalls());
         for (int[] v : res)
             System.out.println(v[0]+","+v[1]);
-//        visualizePixelPath(res);
-        stupidPathShowTestForYobbos(res);
+        visualizePixelPath(res);
+//        stupidPathShowTestForYobbos(res);
     }
 
     public void switchIncludeExcludeView()

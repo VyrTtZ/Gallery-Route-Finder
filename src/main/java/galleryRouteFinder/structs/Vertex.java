@@ -1,9 +1,13 @@
 package galleryRouteFinder.structs;
 
+import galleryRouteFinder.controllers.MainController;
+import galleryRouteFinder.main.Main;
 import javafx.scene.image.Image;
 import javafx.util.Pair;
 
 import java.util.*;
+
+import static galleryRouteFinder.controllers.MainController.NAMES;
 
 public class Vertex {
     private int posX;
@@ -215,50 +219,72 @@ public class Vertex {
                 }
             }
         }
-
-
         return null;
     }
 
-    public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded) {
+    public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded, double shorterDistance, boolean[] artEras) {
         ArrayList <Integer> res=new ArrayList<>();
         for (int i=0; i<included.size()-1; i++){
-            ArrayList<Integer> temp=dijkstra(included.get(i), included.get(i+1), excluded);
+            ArrayList<Integer> temp=dijkstra(included.get(i), included.get(i+1), excluded, shorterDistance, artEras);
             res.addAll(temp);
         }
         return res;
     }
 
-    private static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList<Integer> excluded)
+    private static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList<Integer> excluded, double shorterDistance, boolean[] artEras)
     {
         HashMap <Integer, Boolean> visited = new HashMap<>();
         if (excluded!=null)
             for (int i : excluded)
                 visited.put(i, true);
         HashMap <Integer, Vertex> prev = new HashMap<>();
-        PriorityQueue<Pair<Pair<Vertex, Vertex>, Double>> queue=new PriorityQueue<>((o1, o2) -> {
-            if (o1.getValue()<o2.getValue())
-                return -1;
-            else if (o1.getValue()>o2.getValue())
-                return 1;
-            return 0;
+        PriorityQueue<Pair<Pair<Vertex, Vertex>, Pair <Double, Integer>>> queue=new PriorityQueue<>((o1, o2) -> {
+            if (shorterDistance > 0) { //Interesting, weight interesting count first
+                if (o1.getValue().getValue() < o2.getValue().getValue())
+                    return 1;
+                if (o1.getValue().getValue() > o2.getValue().getValue())
+                    return -1;
+            }
+            return -o1.getValue().getKey().compareTo(o2.getValue().getKey());
         });
-        queue.add(new Pair<>(new Pair<>(startVertex, startVertex), 0.0));
+        queue.add(new Pair<>(new Pair<>(startVertex, startVertex), new Pair<>(0.0, 0)));
 
         while (!queue.isEmpty())
         {
-            Pair<Pair<Vertex, Vertex>, Double> pair=queue.poll();
+            Pair<Pair<Vertex, Vertex>, Pair <Double, Integer>> pair=queue.poll();
             Vertex currentVertex=pair.getKey().getValue();
             Vertex prevVertex=pair.getKey().getKey();
-            double cost=pair.getValue();
+            double cost=pair.getValue().getKey();
+            int interestingCount=pair.getValue().getValue();
             visited.put(currentVertex.getId(), true);
             prev.put(currentVertex.getId(), prevVertex);
             if (currentVertex.equals(endVertex))
                 break;
-            for (Edge edge: currentVertex.getBranches())
-                for (Vertex tmp: edge.getNodes())
-                    if (!tmp.equals(currentVertex) && (!visited.containsKey(tmp.getId()) || !visited.get(tmp.getId())))
-                        queue.add(new Pair<>(new Pair<>(currentVertex, tmp), cost+edge.getWeight()));
+            for (Edge edge: currentVertex.getBranches()) {
+                for (Vertex tmp : edge.getNodes()) {
+                    if (!tmp.equals(currentVertex) && !visited.containsKey(tmp.getId())) {
+                        if (shorterDistance<0)
+                        {
+                            queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight(),  interestingCount)));
+                        }
+                        else
+                        {
+                        boolean flag=false;
+                        for (int i = 0; i< NAMES.length; i++)
+                        {
+                            if (tmp.getCategory().equals(NAMES[i]) && artEras[i]) //Is interesting, decrease by amount
+                            {
+                                queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 - shorterDistance / 100), interestingCount+1)));
+                                flag=true;
+                                break;
+                            }
+                        }
+                        if (!flag)
+                            queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 + shorterDistance / 100), interestingCount)));
+                        }
+                    }
+                }
+            }
         }
         ArrayList <Integer> path=new ArrayList<>();
         while (!endVertex.equals(startVertex))

@@ -1,5 +1,6 @@
 package galleryRouteFinder.main;
 
+import galleryRouteFinder.controllers.MainController;
 import galleryRouteFinder.structs.Vertex;
 import javafx.util.Pair;
 import org.openjdk.jmh.annotations.*;
@@ -59,7 +60,7 @@ public class BenchmarkClass {
         ArrayList <Vertex> tmp=new ArrayList <>();
         tmp.add(vertices.getFirst());
         tmp.add(vertices.getLast());
-        ArrayList <Integer> res=Vertex.inclusiveDijkstra(tmp, null);
+        ArrayList <Integer> res=Vertex.inclusiveDijkstra(tmp, null, -1, null);
         bh.consume(res);
     }
     @Benchmark
