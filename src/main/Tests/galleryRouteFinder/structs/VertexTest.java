@@ -126,43 +126,48 @@ class VertexTest {
 
     @Test
     void BFS() {
-        LinkedList<Vertex> result = a.BFS(a, c, null);
+        LinkedList<Vertex> result = a.BFS(a, c, null ,null);
         assertEquals(a, result.getFirst());
         assertEquals(c, result.getLast());
 
         for(Vertex v : result) System.out.println(v.getName());
         LinkedList<Vertex> avoid = new LinkedList<>();
         avoid.add(g);
-        LinkedList<Vertex> avoided = a.BFS(a, k, avoid);
+        LinkedList<Vertex> avoided = a.BFS(a, k, avoid, null);
         assertFalse(avoided.contains(g));
+
+        LinkedList<Vertex> include = new LinkedList<>();
+        include.add(b);
+        LinkedList<Vertex> included = a.BFS(a, k, null, include);
+        assertTrue(included.contains(b));
     }
 
-//    @Test
-//    void BFSpx(){
-//        LinkedList<int[]> wallsAndObjects = new LinkedList<>();
-//
-//        for (int i = 0; i < 7; i++) {
-//            wallsAndObjects.add(new int[]{0, i});
-//            wallsAndObjects.add(new int[]{6, i});
-//            wallsAndObjects.add(new int[]{i, 0});
-//            wallsAndObjects.add(new int[]{i, 6});
-//        }
-//        System.out.println("test1");
-//        wallsAndObjects.add(new int[]{3, 3});
-//
-//        int[] start = {1, 1};
-//        int[] end   = {5, 5};
-//        System.out.println("test2");
-//        LinkedList<int[]> path = Vertex.BFS(start, end, wallsAndObjects);
-//        assertFalse(path.isEmpty());
-//
-//        boolean flag = false;
-//        for(int[] x : path){
-//            if(x[0] == 3 && x[1] == 3) flag = true;
-//        }
-//        assertFalse(flag);
-//
-//    }
+    @Test
+    void BFSpx(){
+        LinkedList<int[]> wallsAndObjects = new LinkedList<>();
+
+        for (int i = 0; i < 7; i++) {
+            wallsAndObjects.add(new int[]{0, i});
+            wallsAndObjects.add(new int[]{6, i});
+            wallsAndObjects.add(new int[]{i, 0});
+            wallsAndObjects.add(new int[]{i, 6});
+        }
+        System.out.println("test1");
+        wallsAndObjects.add(new int[]{3, 3});
+
+        int[] start = {1, 1};
+        int[] end   = {5, 5};
+        System.out.println("test2");
+        LinkedList<int[]> path = Vertex.BFS(start, end, wallsAndObjects);
+        assertFalse(path.isEmpty());
+
+        boolean flag = false;
+        for(int[] x : path){
+            if(x[0] == 3 && x[1] == 3) flag = true;
+        }
+        assertFalse(flag);
+
+    }
 
     @Test
     void DFS() {
@@ -173,21 +178,41 @@ class VertexTest {
                 System.out.print(v.getName());
             }
         }
+
         assertEquals(a, result.getFirst().getFirst());
         assertEquals(result.getFirst().getLast(), k);
 
 
         LinkedList<Vertex> avoid = new LinkedList<>();
         avoid.add(g);
-        LinkedList<Vertex> avoided = a.DFS(a, c, avoid, null).getFirst();
+        LinkedList<Vertex> avoided = Vertex.DFS(a, c, avoid, null).getFirst();
         for(Vertex v : avoided) System.out.println(v.getName());
         assertFalse(avoided.contains(h));
         assertEquals(avoided.getLast(), c);
+
+
+        LinkedList<Vertex> include = new LinkedList<>();
+        include.add(b);
+        include.add(j);
+
+        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(a, k, null, null), include);
+        System.out.println("--------------------------------------------");
+        for(LinkedList<Vertex> lv : res){
+            System.out.println("........");
+            for(Vertex v : lv)
+                System.out.print(v.getName());
+        }
+
+
+
+        assertTrue(res.getFirst().contains(b));
+        assertTrue(res.getFirst().contains(j));
+        assertEquals(res.getFirst().getLast(), k);
     }
 
     @Test
     void BFSandDijkstra() {
-        LinkedList<Vertex> result = Vertex.BFS(a, k, null);
+        LinkedList<Vertex> result = Vertex.BFS(a, k, null, null);
         List<Integer> BFSRes = new ArrayList<>();
         for (Vertex v : result) BFSRes.add(v.getId());
 

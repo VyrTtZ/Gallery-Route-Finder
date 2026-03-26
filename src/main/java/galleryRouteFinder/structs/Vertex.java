@@ -124,27 +124,7 @@ public class Vertex {
 
     }
 
-    public static int BFS(Vertex start) {
-        Queue<Vertex> agenda = new LinkedList<>();
-        LinkedList<Vertex> visited = new LinkedList<>();
-
-        agenda.add(start);
-        visited.add(start);
-
-        while (!agenda.isEmpty()) {
-            Vertex current = agenda.poll();
-
-            for (Vertex neighbor : current.getNeighbors()) {
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    agenda.add(neighbor);
-                }
-            }
-        }
-        return visited.size();
-    }
-
-    public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid) {
+    public static LinkedList<Vertex> BFS(Vertex start, Vertex end, LinkedList<Vertex> avoid, LinkedList<Vertex> include) {
         Queue<LinkedList<Vertex>> agenda = new LinkedList<>();
         LinkedList<Vertex> visited = new LinkedList<>();
 
@@ -158,9 +138,10 @@ public class Vertex {
             LinkedList<Vertex> currentPath = agenda.poll();
             Vertex currentNode = currentPath.getLast();
 
-            if (currentNode == end) {
+            if(include == null && currentNode == end)
                 return currentPath;
-            }
+            else if(include != null && currentNode == end && currentPath.containsAll(include))
+                return currentPath;
 
             for (Vertex neighbor : currentNode.getNeighbors()) {
                 if (!visited.contains(neighbor)) {
@@ -314,6 +295,14 @@ public class Vertex {
 
 
         visited.removeLast();
+
+        return res;
+    }
+
+    public static LinkedList<LinkedList<Vertex>> dfsSivHelper(LinkedList<LinkedList<Vertex>> v, LinkedList<Vertex> incl){
+        LinkedList<LinkedList<Vertex>> res = new LinkedList<>();
+        for(LinkedList<Vertex> x : v)
+            if(x.containsAll(incl)) res.add(x);
 
         return res;
     }

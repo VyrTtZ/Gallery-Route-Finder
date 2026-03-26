@@ -64,7 +64,7 @@ public class BenchmarkClass {
     }
     @Benchmark
     public void bfsShortestPath(Blackhole bh){
-        LinkedList<Vertex> res = Vertex.BFS(vertices.getFirst(), vertices.getLast(), null);
+        LinkedList<Vertex> res = Vertex.BFS(vertices.getFirst(), vertices.getLast(), null, null);
         bh.consume(res);
     }
 

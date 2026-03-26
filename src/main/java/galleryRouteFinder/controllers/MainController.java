@@ -203,7 +203,9 @@ public class MainController {
         if (shortestPathAlgorithm) //Diji
             res = Vertex.inclusiveDijkstra(included, excluded);
         else {
-            LinkedList<Vertex> path = Vertex.BFS(startV, endV, null);
+            LinkedList<Vertex> excludeLL = new LinkedList<>();
+            for(int i : excluded) excludeLL.add(getVertex(i));
+            LinkedList<Vertex> path = Vertex.BFS(startV, endV, excludeLL, new LinkedList<>(included));
             for (Vertex v : path) res.add(v.getId());
         }
         if (!containsStart)
