@@ -276,7 +276,8 @@ public class MainController {
     }
 
     public void dfsRouting() {
-        if (drawing) return;
+        if (drawing) //TODO refactor
+            return;
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         boolean containsEnd = included.contains(endV), containsStart = included.contains(startV);
@@ -287,8 +288,23 @@ public class MainController {
         LinkedList<Vertex> excludeLL = new LinkedList<>();
         for (int i : excluded) excludeLL.add(getVertex(i));
         LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), excludeLL), new LinkedList<Vertex>(included));
-
-
+        drawDFSPaths();
+        Stage stage=new Stage();
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dfsResult.fxml"));
+            Scene scene = new Scene(loader.load());
+            DFSResultController controller=loader.getController();
+            controller.displayRoutes(res);
+            stage.setScene(scene);
+            stage.setTitle("DFS Result View");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        stage.show();
+        if (!containsStart)
+            included.remove(startV);
+        if (!containsEnd)
+            included.remove(endV);
     }
 
     public void bfsPixelPath(int secondX, int secondY)
@@ -367,6 +383,11 @@ public class MainController {
         tmp.setOnFinished(e -> drawing=false);
         sequence.getChildren().add(tmp);
         sequence.playFromStart();
+    }
+
+    private void drawDFSPaths()
+    {
+        SequentialTransition sequence=new SequentialTransition();
     }
 
     private void visualizeShortestPath(List<Integer> path)
