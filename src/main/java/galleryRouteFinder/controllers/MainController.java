@@ -42,6 +42,7 @@ public class MainController {
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
     private boolean clickedOnce=false, drawing=false;
     private double shorterDistance=0;
+    private Image firstMap=new Image(getClass().getResourceAsStream("/images/map.jpg")), secondMap=new Image(getClass().getResourceAsStream("/images/secondMap.jpg"));
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
     private boolean[] artEras=new boolean[NAMES.length];
 
@@ -82,7 +83,7 @@ public class MainController {
                 clickedOnce=false;
             }
         });
-        imageView.setImage(new Image(getClass().getResourceAsStream("/images/map.jpg")));
+        imageView.setImage(firstMap);
     }
 
     public void getVertices()
@@ -276,7 +277,7 @@ public class MainController {
 
     public void dfsRouting()
     {
-        //TODO
+        //TODO add dfs
     }
 
     public void bfsPixelPath(int secondX, int secondY)
@@ -292,13 +293,20 @@ public class MainController {
         end[1]=secondY;
 
         System.out.println("start:"+start[0]+","+start[1]+","+end[0]+","+end[1]);
-        //TODO fix bfs pixel
 
         LinkedList<int[]> res=Vertex.BFS(start, end, findWalls());
         for (int[] v : res)
             System.out.println(v[0]+","+v[1]);
-        visualizePixelPath(res);
-//        stupidPathShowTestForYobbos(res);
+//        visualizePixelPath(res);
+        stupidPathShowTestForYobbos(res);
+    }
+
+    public void switchMap()
+    {
+        if (imageView.getImage().equals(firstMap))
+            imageView.setImage(secondMap);
+        else
+            imageView.setImage(firstMap);
     }
 
     public void switchIncludeExcludeView()
