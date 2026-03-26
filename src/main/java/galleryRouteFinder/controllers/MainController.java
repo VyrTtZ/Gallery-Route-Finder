@@ -275,9 +275,20 @@ public class MainController {
         visualizeShortestPath(res);
     }
 
-    public void dfsRouting()
-    {
-        //TODO add dfs
+    public void dfsRouting() {
+        if (drawing) return;
+        int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
+        Vertex startV = getVertex(startId), endV = getVertex(endId);
+        boolean containsEnd = included.contains(endV), containsStart = included.contains(startV);
+        if (!containsStart)
+            included.addFirst(startV);
+        if (!containsEnd)
+            included.add(endV);
+        LinkedList<Vertex> excludeLL = new LinkedList<>();
+        for (int i : excluded) excludeLL.add(getVertex(i));
+        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), excludeLL), new LinkedList<Vertex>(included));
+
+
     }
 
     public void bfsPixelPath(int secondX, int secondY)
