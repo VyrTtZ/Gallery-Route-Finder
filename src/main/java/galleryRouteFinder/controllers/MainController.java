@@ -333,8 +333,7 @@ public class MainController {
         LinkedList<int[]> res=Vertex.BFS(start, end, findWalls());
         for (int[] v : res)
             System.out.println(v[0]+","+v[1]);
-//        visualizePixelPath(res);
-        stupidPathShowTestForYobbos(res);
+        visualizePixelPath(res);
     }
 
     public void switchMap()
@@ -384,7 +383,7 @@ public class MainController {
         for (int[] point : res)
         {
             PauseTransition pause=new PauseTransition(Duration.millis(10));
-            Rectangle rect=new Rectangle(point[0]*SCALE, point[1]*SCALE, 1, 1);
+            Rectangle rect=new Rectangle(point[0], point[1], 1, 1); //I removed scale it made the drawing displaced up left diagonal - Gustaw
             rect.setFill(Color.RED);
             rect.setStrokeWidth(0);
 
@@ -469,8 +468,8 @@ public class MainController {
         LinkedList<int[]> res = new LinkedList<>();
         for(int i = 0; i < imageView.getImage().getHeight(); i++){
             for(int j = 0; j < imageView.getImage().getWidth(); j++){
-                if(wI.getPixelReader().getColor(j, i).getBrightness() < .9) {
-                    res.add(new int[]{j, i});
+                if(wI.getPixelReader().getColor(j, i).getBrightness() < .99) {
+                    res.add(new int[]{(int)(j*SCALE), (int)(i*SCALE)});
 //                    wI.getPixelWriter().setColor(j, i, Color.GREEN);
                 }
 

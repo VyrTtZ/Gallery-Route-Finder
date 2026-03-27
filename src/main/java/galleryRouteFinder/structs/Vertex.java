@@ -163,8 +163,8 @@ public class Vertex {
 
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
 
-        boolean[][] bin = new boolean[1481][904];
-        Pair[][] parent = new Pair[1481][904];
+        boolean[][] bin = new boolean[1037][633];
+        Pair[][] parent = new Pair[1037][633];
         for(int[] i : wallsAndObjects){
             bin[i[0]][i[1]] = true;
         }
@@ -190,9 +190,14 @@ public class Vertex {
             System.out.println("curX" + current[0] +  " curY " + current[1]);
             int[][] neighbors = {
                     {current[0], current[1] - 1},
+                    {current[0], current[1] + 1},
                     {current[0] - 1, current[1]},
                     {current[0] + 1, current[1]},
-                    {current[0], current[1] + 1},
+
+                    {current[0] - 1, current[1] - 1},
+                    {current[0] - 1, current[1] + 1},
+                    {current[0] + 1, current[1] - 1},
+                    {current[0] + 1, current[1] + 1}
             };
             for(int[] i : neighbors){ // helper bc concModException
                 if (i[0] < 0 || i[0] >= 1481 || i[1] < 0 || i[1] >= 904) continue;

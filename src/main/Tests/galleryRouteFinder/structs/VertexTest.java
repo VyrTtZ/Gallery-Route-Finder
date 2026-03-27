@@ -195,7 +195,7 @@ class VertexTest {
         include.add(b);
         include.add(j);
 
-        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(a, k, null, null), include);
+        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(a, k, null, null), include, 2);
         System.out.println("--------------------------------------------");
         for(LinkedList<Vertex> lv : res){
             System.out.println("........");
