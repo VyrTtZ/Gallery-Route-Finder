@@ -287,7 +287,7 @@ public class MainController {
             included.add(endV);
         LinkedList<Vertex> excludeLL = new LinkedList<>();
         for (int i : excluded) excludeLL.add(getVertex(i));
-        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), excludeLL), new LinkedList<Vertex>(included));
+        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), excludeLL), new LinkedList<Vertex>(included), Integer.parseInt(maxDFSField.getText()));
         drawDFSPaths();
         Stage stage=new Stage();
         try {
@@ -448,9 +448,14 @@ public class MainController {
         LinkedList<int[]> res = new LinkedList<>();
         for(int i = 0; i < imageView.getImage().getHeight(); i++){
             for(int j = 0; j < imageView.getImage().getWidth(); j++){
-                if(wI.getPixelReader().getColor(j, i).getBrightness() < .9) res.add(new int[]{i, j});
+                if(wI.getPixelReader().getColor(j, i).getBrightness() < .9) {
+                    res.add(new int[]{j, i});
+//                    wI.getPixelWriter().setColor(j, i, Color.GREEN);
+                }
+
             }
         }
+//        imageView.setImage(wI);
         return res;
     }
 }

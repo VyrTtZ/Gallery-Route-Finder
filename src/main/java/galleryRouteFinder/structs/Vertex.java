@@ -205,17 +205,12 @@ public class Vertex {
                         break;
                     }
                 }
-                for(int[] k : wallsAndObjects){
-                    if(i[0] == k[0] && i[1] == k[1]){
-                        System.out.println("gropious");
-                    }
-                }
                 if(!found){
                     bin.add(i);
                     parent.put(i, current);
                     agenda.add(i);
-                    System.out.println("broski" + counterTesting2);
-                    System.out.println(wallsAndObjects.size());
+//                    System.out.println("broski" + counterTesting2);
+//                    System.out.println(wallsAndObjects.size());
                 }
             }
         }
@@ -336,10 +331,11 @@ public class Vertex {
         return res;
     }
 
-    public static LinkedList<LinkedList<Vertex>> dfsSivHelper(LinkedList<LinkedList<Vertex>> v, LinkedList<Vertex> incl){
+    public static LinkedList<LinkedList<Vertex>> dfsSivHelper(LinkedList<LinkedList<Vertex>> v, LinkedList<Vertex> incl, int maxPaths){
         LinkedList<LinkedList<Vertex>> res = new LinkedList<>();
+        int i = 0;
         for(LinkedList<Vertex> x : v)
-            if(x.containsAll(incl)) res.add(x);
+            if(x.containsAll(incl) && i < maxPaths+1) res.add(x);
 
         return res;
     }
