@@ -49,7 +49,7 @@ public class MainController {
     private ArrayList <Vertex> vertices=new ArrayList <>();
     private ArrayList <Edge> edges=new ArrayList <>();
     private ArrayList <Vertex> included=new ArrayList <>();
-    private ArrayList <Integer> excluded=new ArrayList <>();
+    private ArrayList <Vertex> excluded=new ArrayList <>();
 
     public void initialize()
     {
@@ -196,25 +196,26 @@ public class MainController {
             return;
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
-        ArrayList <Integer> res=new ArrayList<>();
+        List <Vertex> res=new ArrayList<>();
         boolean containsEnd=included.contains(endV), containsStart=included.contains(startV);
         if (!containsStart)
             included.addFirst(startV);
         if (!containsEnd)
             included.add(endV);
         if (shortestPathAlgorithm) //Diji
-            res = Vertex.inclusiveDijkstra(included, excluded, -1, null);
+        {
+            ArrayList <Integer> tmp = Vertex.inclusiveDijkstra(included, excluded, -1, null);
+            for (int i : tmp)
+                res.add(getVertex(i));
+        }
         else {
-            LinkedList<Vertex> excludeLL = new LinkedList<>();
-            for(int i : excluded) excludeLL.add(getVertex(i));
-            LinkedList<Vertex> path = Vertex.BFS(startV, endV, excludeLL, new LinkedList<>(included));
-            for (Vertex v : path) res.add(v.getId());
+            res= Vertex.BFS(startV, endV, new LinkedList<>(excluded), new LinkedList<>(included));
         }
         if (!containsStart)
             included.remove(startV);
         if (!containsEnd)
             included.remove(endV);
-        visualizeShortestPath(res);
+        visualizeShortestPath(res, 200).playFromStart();
     }
 
     public void interestingSettings()
@@ -267,12 +268,15 @@ public class MainController {
             included.addFirst(startV);
         if (!containsEnd)
             included.add(endV);
-        ArrayList <Integer> res = Vertex.inclusiveDijkstra(included, excluded, shorterDistance, artEras);
+        ArrayList <Integer> tmp = Vertex.inclusiveDijkstra(included, excluded, shorterDistance, artEras);
+        List <Vertex> res=new ArrayList<>();
+        for  (int i : tmp)
+            res.add(getVertex(i));
         if (!containsStart)
             included.remove(startV);
         if (!containsEnd)
             included.remove(endV);
-        visualizeShortestPath(res);
+        visualizeShortestPath(res, 200).playFromStart();
     }
 
     public void dfsRouting() {
@@ -285,10 +289,8 @@ public class MainController {
             included.addFirst(startV);
         if (!containsEnd)
             included.add(endV);
-        LinkedList<Vertex> excludeLL = new LinkedList<>();
-        for (int i : excluded) excludeLL.add(getVertex(i));
-        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), excludeLL), new LinkedList<Vertex>(included), Integer.parseInt(maxDFSField.getText()));
-        drawDFSPaths();
+        LinkedList<LinkedList<Vertex>> res = Vertex.dfsSivHelper(Vertex.DFS(startV, endV, new LinkedList<Vertex>(), new LinkedList<>(excluded)), new LinkedList<Vertex>(included), Integer.parseInt(maxDFSField.getText()));
+        drawDFSPaths(res);
         Stage stage=new Stage();
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/dfsResult.fxml"));
@@ -330,6 +332,9 @@ public class MainController {
 
     public void switchMap()
     {
+        if (drawing)
+            return;
+        imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
         if (imageView.getImage().equals(firstMap))
             imageView.setImage(secondMap);
         else
@@ -385,20 +390,29 @@ public class MainController {
         sequence.playFromStart();
     }
 
-    private void drawDFSPaths()
+    private void drawDFSPaths(LinkedList<LinkedList<Vertex>> res)
     {
         SequentialTransition sequence=new SequentialTransition();
+        for (List <Vertex> v : res)
+        {
+            SequentialTransition seq=visualizeShortestPath(v, 20);
+            sequence.getChildren().add(seq);
+        }
+        sequence.playFromStart();
     }
 
-    private void visualizeShortestPath(List<Integer> path)
+    private SequentialTransition visualizeShortestPath(List<Vertex> path, double delay)
     {
         SequentialTransition sequence=new SequentialTransition();
-        imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
-        drawing=true;
-        for (Integer integer : path) {
-            PauseTransition circleDraw = new PauseTransition(Duration.millis(200));
+        PauseTransition temp =new PauseTransition(Duration.millis(delay*10));
+        temp.setOnFinished(e -> {
+            imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
+            drawing=true;
+        });
+        sequence.getChildren().add(temp);
+        for (Vertex vertex : path) {
+            PauseTransition circleDraw = new PauseTransition(Duration.millis(delay));
             Circle circle = new Circle();
-            Vertex vertex = getVertex(integer);
             circle.setCenterX(vertex.getPosX() * SCALE);
             circle.setCenterY(vertex.getPosY() * SCALE);
             circle.setStroke(Color.YELLOW);
@@ -412,12 +426,12 @@ public class MainController {
             circleDraw.setOnFinished(event -> {imagePane.getChildren().addAll(circle, label);});
             sequence.getChildren().add(circleDraw);
         }
-        PauseTransition tmp =new PauseTransition(Duration.millis(10));
+        PauseTransition tmp =new PauseTransition(Duration.millis(delay*10));
         tmp.setOnFinished(e -> {
             drawing=false;
         });
         sequence.getChildren().add(tmp);
-        sequence.playFromStart();
+        return sequence;
     }
 
     public void updateIncludeExclude(HashMap <Integer, String> states, HashSet <Integer> orderSet, HashMap <Integer, Pair <Vertex, Integer>> vertices)
@@ -426,7 +440,7 @@ public class MainController {
         excluded=new ArrayList<>();
         for (Vertex vertex : this.vertices)
             if (states.get(vertex.getId()).equals("Exclude"))
-                excluded.add(vertex.getId());
+                excluded.add(vertex);
         for (Integer i : orderSet)
             for (Vertex vertex : this.vertices)
                 if (states.get(vertex.getId()).equals("Include") && vertices.get(vertex.getId()).getValue().equals(i))

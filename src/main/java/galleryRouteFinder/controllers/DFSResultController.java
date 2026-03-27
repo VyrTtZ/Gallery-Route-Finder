@@ -10,10 +10,6 @@ import java.util.List;
 public class DFSResultController {
     public TreeView<String> treeView;
 
-    public void initialize(){
-        treeView = new TreeView<>();
-    }
-
     public void displayRoutes(LinkedList <LinkedList <Vertex>> list)
     {
         TreeItem<String> root = new TreeItem<>("Routes");

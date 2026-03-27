@@ -47,7 +47,7 @@ public class IncludeExcludeController {
         this.mainController=mainController;
     }
 
-    public void setIdsVerticesAndStates(ArrayList<Vertex> vertices, ArrayList<Vertex> include, ArrayList<Integer> exclude){
+    public void setIdsVerticesAndStates(ArrayList<Vertex> vertices, ArrayList<Vertex> include, ArrayList<Vertex> exclude){
         for (Vertex vertex : vertices)
         {
             ids.add(vertex.getId());
@@ -56,8 +56,8 @@ public class IncludeExcludeController {
         }
         for (Vertex vertex : include)
             states.put(vertex.getId(), "Include");
-        for (Integer id : exclude)
-            states.put(id, "Exclude");
+        for (Vertex vertex : exclude)
+            states.put(vertex.getId(), "Exclude");
         populateData();
     }
 

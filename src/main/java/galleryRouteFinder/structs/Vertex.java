@@ -217,7 +217,7 @@ public class Vertex {
         return null;
     }
 
-    public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Integer> excluded, double shorterDistance, boolean[] artEras) {
+    public static ArrayList <Integer> inclusiveDijkstra(ArrayList<Vertex> included, ArrayList<Vertex> excluded, double shorterDistance, boolean[] artEras) {
         ArrayList <Integer> res=new ArrayList<>();
         for (int i=0; i<included.size()-1; i++){
             ArrayList<Integer> temp=dijkstra(included.get(i), included.get(i+1), excluded, shorterDistance, artEras);
@@ -226,12 +226,12 @@ public class Vertex {
         return res;
     }
 
-    private static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList<Integer> excluded, double shorterDistance, boolean[] artEras)
+    private static ArrayList<Integer> dijkstra(Vertex startVertex, Vertex endVertex, ArrayList<Vertex> excluded, double shorterDistance, boolean[] artEras)
     {
         HashMap <Integer, Boolean> visited = new HashMap<>();
         if (excluded!=null)
-            for (int i : excluded)
-                visited.put(i, true);
+            for (Vertex vertex : excluded)
+                visited.put(vertex.getId(), true);
         HashMap <Integer, Vertex> prev = new HashMap<>();
         PriorityQueue<Pair<Pair<Vertex, Vertex>, Pair <Double, Integer>>> queue=new PriorityQueue<>((o1, o2) -> {
             if (shorterDistance > 0) { //Interesting, weight interesting count first
