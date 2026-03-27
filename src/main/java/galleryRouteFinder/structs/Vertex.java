@@ -236,7 +236,7 @@ public class Vertex {
                 if (o1.getValue().getValue() > o2.getValue().getValue())
                     return -1;
             }
-            return -o1.getValue().getKey().compareTo(o2.getValue().getKey());
+            return o1.getValue().getKey().compareTo(o2.getValue().getKey());
         });
         queue.add(new Pair<>(new Pair<>(startVertex, startVertex), new Pair<>(0.0, 0)));
 
@@ -260,18 +260,18 @@ public class Vertex {
                         }
                         else
                         {
-                        boolean flag=false;
-                        for (int i = 0; i< NAMES.length; i++)
-                        {
-                            if (tmp.getCategory().equals(NAMES[i]) && artEras[i]) //Is interesting, decrease by amount
+                            boolean flag=false;
+                            for (int i = 0; i< NAMES.length; i++)
                             {
-                                queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 - shorterDistance / 100), interestingCount+1)));
-                                flag=true;
-                                break;
+                                if (tmp.getCategory().equals(NAMES[i]) && artEras[i]) //Is interesting, decrease by amount
+                                {
+                                    queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 - shorterDistance / 100), interestingCount+1)));
+                                    flag=true;
+                                    break;
+                                }
                             }
-                        }
-                        if (!flag)
-                            queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 + shorterDistance / 100), interestingCount)));
+                            if (!flag)
+                                queue.add(new Pair<>(new Pair<>(currentVertex, tmp), new Pair<>(cost + edge.getWeight() * (1 + shorterDistance / 100), interestingCount)));
                         }
                     }
                 }
@@ -330,19 +330,9 @@ public class Vertex {
         LinkedList<LinkedList<Vertex>> res = new LinkedList<>();
         int i = 0;
         for(LinkedList<Vertex> x : v){
-            if(x.containsAll(incl) && i < maxPaths+1) res.add(x);
+            if(x.containsAll(incl) && i < maxPaths) res.add(x);
             i++;
         }
-
-
         return res;
     }
-
-
-
-
-
-
-
-
 }

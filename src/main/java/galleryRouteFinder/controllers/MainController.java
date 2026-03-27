@@ -120,7 +120,7 @@ public class MainController {
                 }
                 start+=tmp.length()+1;
             }
-//            vertex.setImage(new Image(getClass().getResourceAsStream("/images/"+vertex.getId()+".jpg")));
+            vertex.setImage(new Image(getClass().getResourceAsStream("/images/"+vertex.getId()+".jpg")));
             vertices.add(vertex);
         }
     }
