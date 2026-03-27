@@ -160,60 +160,49 @@ public class Vertex {
     }
 
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
-        LinkedList<int[]> bin = new LinkedList<>();
-        if(wallsAndObjects != null)
-            bin.addAll(wallsAndObjects);
+
+        boolean[][] bin = new boolean[1481][904];
+        Pair[][] parent = new Pair[1481][904];
+        for(int[] i : wallsAndObjects){
+            bin[i[0]][i[1]] = true;
+        }
         LinkedList<int[]> path = new LinkedList<>();
         Queue<int[]> agenda = new LinkedList<>();
-        HashMap<int[], int[]> parent = new HashMap<>();
 
-        parent.put(start, null);
+        parent[start[0]][start[1]] = null;
         agenda.add(start);
-        bin.add(start);
-
-        int counterTesting2 = 0;
-
-
+        bin[start[0]][start[1]] = true;
 
         while(!agenda.isEmpty()){
+
             int[] current = agenda.poll();
 
             if(current[0] == end[0] && current[1] == end[1]) {
-                int[] back = current;
+                Pair<Integer, Integer> back = new Pair<>(current[0], current[1]);
                 while(back != null) {
-                    path.addFirst(back);
-                    back = parent.get(back);
+                    path.addFirst(new int[]{back.getKey(), back.getValue()});
+                    back = parent[back.getKey()][back.getValue()];
                 }
                 return path;
             }
+            System.out.println("curX" + current[0] +  " curY " + current[1]);
             int[][] neighbors = {
-                    {current[0] - 1, current[1] - 1},
                     {current[0], current[1] - 1},
-                    {current[0] + 1, current[1] - 1},
                     {current[0] - 1, current[1]},
                     {current[0] + 1, current[1]},
-                    {current[0] - 1, current[1] + 1},
                     {current[0], current[1] + 1},
-                    {current[0] + 1, current[1] + 1}
             };
             for(int[] i : neighbors){ // helper bc concModException
-                boolean found = false;
-                for(int[] j : bin){
-                    if(i[0] == j[0] && i[1] == j[1]){
-                        counterTesting2++;
-                        found = true;
-                        break;
-                    }
-                }
-                if(!found){
-                    bin.add(i);
-                    parent.put(i, current);
-                    agenda.add(i);
-//                    System.out.println("broski" + counterTesting2);
-//                    System.out.println(wallsAndObjects.size());
+                if (i[0] < 0 || i[0] >= 1481 || i[1] < 0 || i[1] >= 904) continue;
+
+                if(!bin[i[0]][i[1]]){
+                    parent[i[0]][i[1]] = new Pair<>(current[0], current[1]);
+                    agenda.add(new int[]{i[0], i[1]});
+                    bin[i[0]][i[1]] = true;
                 }
             }
         }
+        System.out.println("bababoooy");
         return null;
     }
 
