@@ -39,13 +39,15 @@ public class MainController {
     private static final double SCALE=0.7; //Scale of the map in the program
     public static final String[] NAMES = new String[]{"Temporary Exhibition", "Medieval and Early Renaissance (1260-1550)", "Renaissance (1500-1600)",  "Baroque (1600-1700)", "Rococo to Romanticism (1700-1800)", "Towards Modernism (1800+)"};
 
+    //Variables
     private boolean shortestPathAlgorithm=true; //True=Dijkstra, false=bfs,
     private boolean clickedOnce=false, drawing=false;
     private double shorterDistance=0;
     private Image firstMap=new Image(getClass().getResourceAsStream("/images/map.jpg")), secondMap=new Image(getClass().getResourceAsStream("/images/secondMap.jpg"));
     private Pair <Integer, Integer> firstCoords; //Of a click for bfs pixel path
-    private boolean[] artEras=new boolean[NAMES.length];
 
+    //Lists
+    private boolean[] artEras=new boolean[NAMES.length];
     private ArrayList <Vertex> vertices=new ArrayList <>();
     private ArrayList <Edge> edges=new ArrayList <>();
     private ArrayList <Vertex> included=new ArrayList <>();
@@ -280,8 +282,13 @@ public class MainController {
     }
 
     public void dfsRouting() {
-        if (drawing) //TODO refactor
+        if (drawing)
             return;
+        if (Utils.checkStringInvalidInteger(maxDFSField.getText()))
+        {
+            warningLabel.setText("Maximum DFS value must be a number!");
+            return;
+        }
         int startId = Integer.parseInt(startingRoom.getText()), endId = Integer.parseInt(endingRoom.getText());
         Vertex startV = getVertex(startId), endV = getVertex(endId);
         boolean containsEnd = included.contains(endV), containsStart = included.contains(startV);
