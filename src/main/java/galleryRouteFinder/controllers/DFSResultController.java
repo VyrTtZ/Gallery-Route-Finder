@@ -5,7 +5,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
 import java.util.LinkedList;
-import java.util.List;
 
 public class DFSResultController {
     public TreeView<String> treeView;

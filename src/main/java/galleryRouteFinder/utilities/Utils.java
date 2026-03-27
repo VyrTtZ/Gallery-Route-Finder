@@ -1,7 +1,5 @@
 package galleryRouteFinder.utilities;
 
-import javafx.scene.control.Label;
-
 public class Utils {
     public static String commaStringExtraction(String str, int start)
     {

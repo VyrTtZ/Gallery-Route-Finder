@@ -2,7 +2,10 @@ package galleryRouteFinder.controllers;
 
 import galleryRouteFinder.structs.Vertex;
 import javafx.scene.Cursor;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.HBox;
@@ -74,10 +77,9 @@ public class IncludeExcludeController {
                 }
             }
         }
-        else {
+        else
             for (Integer id : ids)
                 listView.getItems().add(vertices.get(id));
-        }
     }
 
     public class RoomCell extends ListCell <Pair<Vertex, Integer>> {

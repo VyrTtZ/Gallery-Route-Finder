@@ -140,7 +140,7 @@ public class MainController {
             }
             //Format: id1, id2, x, y, x, y,...
             int start=0, i=0;
-            Edge edge=new Edge(getVertex(20), getVertex(20));
+            Edge edge=new Edge(getVertex(2), getVertex(2));
             while (start<line.length())
             {
                 String tmp=Utils.commaStringExtraction(line, start);

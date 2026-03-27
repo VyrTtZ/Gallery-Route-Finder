@@ -1,6 +1,5 @@
 package galleryRouteFinder.main;
 
-import galleryRouteFinder.controllers.MainController;
 import galleryRouteFinder.structs.Vertex;
 import javafx.util.Pair;
 import org.openjdk.jmh.annotations.*;
