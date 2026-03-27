@@ -51,14 +51,20 @@ public class IncludeExcludeController {
     }
 
     public void setIdsVerticesAndStates(ArrayList<Vertex> vertices, ArrayList<Vertex> include, ArrayList<Vertex> exclude){
+        orderSet=new HashSet<>();
         for (Vertex vertex : vertices)
         {
             ids.add(vertex.getId());
             states.put(vertex.getId(), "Neutral");
             this.vertices.put(vertex.getId(), new Pair<>(vertex, 0));
         }
-        for (Vertex vertex : include)
+        int i=0;
+        for (Vertex vertex : include) {
             states.put(vertex.getId(), "Include");
+            orderSet.add(i);
+            this.vertices.put(vertex.getId(), new Pair<>(vertex, i));
+            i++;
+        }
         for (Vertex vertex : exclude)
             states.put(vertex.getId(), "Exclude");
         populateData();
