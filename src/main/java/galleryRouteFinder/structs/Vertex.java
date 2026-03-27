@@ -1,7 +1,5 @@
 package galleryRouteFinder.structs;
 
-import galleryRouteFinder.controllers.MainController;
-import galleryRouteFinder.main.Main;
 import javafx.scene.image.Image;
 import javafx.util.Pair;
 
@@ -17,7 +15,6 @@ public class Vertex {
     private LinkedList<Edge> branches;
     private Image image;
     private int id = 0;
-    private static int nextId = 1;
 
     public Vertex(int id, int posX, int posY, String name, String category, Image image) {
         setPosX(posX);
@@ -95,7 +92,10 @@ public class Vertex {
     public void setNeighbors() {
         neighbors.clear();
         for(Edge i : branches){
-            neighbors.add(i.getNode2());
+            if(i.getNode1() == this)
+                neighbors.add(i.getNode2());
+            else
+                neighbors.add(i.getNode1());
         }
 
     }
@@ -119,9 +119,11 @@ public class Vertex {
     }
 
     public void removeNeighbor(Vertex v){
+        Edge n = null;
         for(Edge e : branches){
-            if(e.getNode2() == v) branches.remove(e);
+            if(e.getNode2() == v) n = e;
         }
+        branches.remove(n);
         neighbors.remove(v);
         setNeighbors();
         setBranches();
@@ -309,7 +311,6 @@ public class Vertex {
                     LinkedList<Vertex> tempPath = new LinkedList<>(x);
                     tempPath.addFirst(start);
                     res.add(tempPath);
-                    System.out.println(res.size());
                 }
             }
         }
@@ -323,8 +324,11 @@ public class Vertex {
     public static LinkedList<LinkedList<Vertex>> dfsSivHelper(LinkedList<LinkedList<Vertex>> v, LinkedList<Vertex> incl, int maxPaths){
         LinkedList<LinkedList<Vertex>> res = new LinkedList<>();
         int i = 0;
-        for(LinkedList<Vertex> x : v)
+        for(LinkedList<Vertex> x : v){
             if(x.containsAll(incl) && i < maxPaths+1) res.add(x);
+            i++;
+        }
+
 
         return res;
     }

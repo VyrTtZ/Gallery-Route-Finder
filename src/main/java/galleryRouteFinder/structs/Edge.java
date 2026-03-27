@@ -6,8 +6,6 @@ public class Edge {
     private Vertex node1;
     private Vertex node2;
     private double weight;
-    private double direction;
-    private static int id = 0;
     private LinkedList<int[]> intermediaryNodes;
 
     public Edge(Vertex node1, Vertex node2) {
@@ -15,7 +13,12 @@ public class Edge {
         this.node2 = node2;
         this.intermediaryNodes = new LinkedList<>();
         setWeight();
-        setId();
+    }
+    public Edge(){
+        this.node1 = null;
+        this.node2 = null;
+        this.intermediaryNodes = new LinkedList<>();
+        setWeight();
     }
 
 
@@ -67,21 +70,5 @@ public class Edge {
         }
         totalDist += Math.sqrt(Math.pow(curX -node2.getPosX(),2) + Math.pow(curY-node2.getPosY(),2));
         this.weight = totalDist;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId() {
-        this.id = id++;
-    }
-
-    public double getDirection() {
-        return direction;
-    }
-
-    public void setDirection(double direction) {
-        this.direction = Math.tan((double) (node2.getPosY() - node1.getPosY()) /(node2.getPosX() - node1.getPosX()));
     }
 }
