@@ -336,7 +336,7 @@ public class MainController {
     {
         if (drawing)
             return;
-        imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
+        imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Rectangle || node instanceof Label);
         if (imageView.getImage().equals(firstMap))
             imageView.setImage(secondMap);
         else
@@ -374,7 +374,7 @@ public class MainController {
     private void visualizePixelPath(LinkedList<int[]> res)
     {
         SequentialTransition sequence=new SequentialTransition();
-        imagePane.getChildren().removeIf(node -> node instanceof Rectangle);
+        imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Rectangle || node instanceof Label);
         drawing=true;
         for (int[] point : res)
         {
@@ -408,7 +408,7 @@ public class MainController {
         SequentialTransition sequence=new SequentialTransition();
         PauseTransition temp =new PauseTransition(Duration.millis(delay*10));
         temp.setOnFinished(e -> {
-            imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Label);
+            imagePane.getChildren().removeIf(node -> node instanceof Circle || node instanceof Rectangle || node instanceof Label);
             drawing=true;
         });
         sequence.getChildren().add(temp);
