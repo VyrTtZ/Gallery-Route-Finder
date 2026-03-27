@@ -187,7 +187,6 @@ public class Vertex {
                 }
                 return path;
             }
-            System.out.println("curX" + current[0] +  " curY " + current[1]);
             int[][] neighbors = {
                     {current[0], current[1] - 1},
                     {current[0], current[1] + 1},
@@ -209,7 +208,8 @@ public class Vertex {
                 }
             }
         }
-        System.out.println("bababoooy");
+
+
         return null;
     }
 

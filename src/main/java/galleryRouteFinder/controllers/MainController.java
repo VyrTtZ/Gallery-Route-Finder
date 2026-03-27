@@ -328,11 +328,7 @@ public class MainController {
         end[0]=secondX;
         end[1]=secondY;
 
-        System.out.println("start:"+start[0]+","+start[1]+","+end[0]+","+end[1]);
-
         LinkedList<int[]> res=Vertex.BFS(start, end, findWalls());
-        for (int[] v : res)
-            System.out.println(v[0]+","+v[1]);
         visualizePixelPath(res);
     }
 
@@ -367,13 +363,13 @@ public class MainController {
         }
         stage.show();
     }
-    private void stupidPathShowTestForYobbos(LinkedList<int[]> path){
-        WritableImage wI = new WritableImage(imageView.getImage().getPixelReader(), (int)imageView.getImage().getWidth(),(int)imageView.getImage().getHeight());
-        for(int[] i : path){
-            wI.getPixelWriter().setColor(i[0], i[1], Color.BLACK);
-        }
-        imageView.setImage(wI);
-    }
+//    private void stupidPathShowTestForYobbos(LinkedList<int[]> path){
+//        WritableImage wI = new WritableImage(imageView.getImage().getPixelReader(), (int)imageView.getImage().getWidth(),(int)imageView.getImage().getHeight());
+//        for(int[] i : path){
+//            wI.getPixelWriter().setColor(i[0], i[1], Color.BLACK);
+//        }
+//        imageView.setImage(wI);
+//    }
 
     private void visualizePixelPath(LinkedList<int[]> res)
     {
