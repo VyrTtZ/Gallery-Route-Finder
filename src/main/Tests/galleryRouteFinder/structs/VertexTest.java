@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class VertexTest {
 
     Vertex a, b, c, d, e, f, g, h, i, j, k;
+    ArrayList<Vertex> vertices;
 
     @BeforeEach
     void setUp() {
@@ -28,6 +29,18 @@ class VertexTest {
         i = new Vertex(9, 3, 1, "I", "",  null);
         j = new Vertex(10, 4, 3, "J", "",  null);
         k = new Vertex(11, 5, 4, "K", "",  null);
+        vertices = new ArrayList<>();
+        vertices.add(a);
+        vertices.add(b);
+        vertices.add(c);
+        vertices.add(d);
+        vertices.add(e);
+        vertices.add(f);
+        vertices.add(g);
+        vertices.add(h);
+        vertices.add(i);
+        vertices.add(j);
+        vertices.add(k);
 
         a.addNeighbor(b);
         a.addNeighbor(c);
@@ -51,6 +64,7 @@ class VertexTest {
     @AfterEach
     void tearDown() {
         a = b = c = d = e = f = g = h = null;
+        vertices = null;
     }
 
     @Test
@@ -206,16 +220,39 @@ class VertexTest {
 
     @Test
     void BFSandDijkstra() {
-        LinkedList<Vertex> result = Vertex.BFS(a, k, null, null);
+        LinkedList<Vertex> bfsRes = Vertex.BFS(a, k, null, null);
 
-        LinkedList<Integer> bfsRes = new LinkedList<>();
-        for(Vertex v : result)bfsRes.add(v.getId());
+        System.out.println("\n\n\n\n");
         ArrayList <Vertex> tmp=new ArrayList <>();
         tmp.add(a);
         tmp.add(k);
         ArrayList <Integer> dijkstraRes = Vertex.inclusiveDijkstra(tmp, null, -1, null);
-        for (int i = 0; i < dijkstraRes.size(); i++) {
-            assertSame(dijkstraRes.get(i), bfsRes.get(i));
+        double bfsResult=0, dijkstraResult=0;
+        for (int i=0; i<bfsRes.size()-1; i++) {
+            Vertex v = bfsRes.get(i), v1=bfsRes.get(i+1);
+            for (Edge edge: v.getBranches()) {
+                if (edge.getNode1().equals(v) && edge.getNode2().equals(v1) || edge.getNode1().equals(v1) && edge.getNode2().equals(v)) {
+                    bfsResult+=edge.getWeight();
+                }
+            }
         }
+        for (int i=0; i<dijkstraRes.size()-1; i++) {
+            Vertex v = null, v1=null;
+            for (Vertex vertex: vertices)
+            {
+                if (vertex.getId()==dijkstraRes.get(i)) {
+                    v=vertex;
+                }
+                if (vertex.getId()==dijkstraRes.get(i+1)) {
+                    v1=vertex;
+                }
+            }
+            for (Edge edge: v.getBranches()) {
+                if (edge.getNode1().equals(v) && edge.getNode2().equals(v1) || edge.getNode1().equals(v1) && edge.getNode2().equals(v)) {
+                    dijkstraResult+=edge.getWeight();
+                }
+            }
+        }
+        assertEquals(dijkstraResult, bfsResult);
     }
 }

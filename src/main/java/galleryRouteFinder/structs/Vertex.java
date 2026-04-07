@@ -287,6 +287,8 @@ public class Vertex {
             Vertex prevVertex=pair.getKey().getKey();
             double cost=pair.getValue().getKey();
             int interestingCount=pair.getValue().getValue();
+            if (visited.containsKey(currentVertex.getId()))
+                continue;
             visited.put(currentVertex.getId(), true);
             prev.put(currentVertex.getId(), prevVertex);
             if (currentVertex.equals(endVertex))
