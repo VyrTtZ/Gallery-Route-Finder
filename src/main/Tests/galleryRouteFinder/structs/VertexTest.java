@@ -207,15 +207,15 @@ class VertexTest {
     @Test
     void BFSandDijkstra() {
         LinkedList<Vertex> result = Vertex.BFS(a, k, null, null);
-        List<Integer> BFSRes = new ArrayList<>();
-        for (Vertex v : result) BFSRes.add(v.getId());
 
+        LinkedList<Integer> bfsRes = new LinkedList<>();
+        for(Vertex v : result)bfsRes.add(v.getId());
         ArrayList <Vertex> tmp=new ArrayList <>();
         tmp.add(a);
         tmp.add(k);
         ArrayList <Integer> dijkstraRes = Vertex.inclusiveDijkstra(tmp, null, -1, null);
         for (int i = 0; i < dijkstraRes.size(); i++) {
-            assertSame(dijkstraRes.get(i), BFSRes.get(i));
+            assertSame(dijkstraRes.get(i), bfsRes.get(i));
         }
     }
 }

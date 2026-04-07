@@ -135,30 +135,70 @@ public class Vertex {
         LinkedList<Vertex> visited = new LinkedList<>();
 
         if (avoid != null) visited.addAll(avoid);
+
         LinkedList<Vertex> firstPath = new LinkedList<>();
         firstPath.add(start);
         agenda.add(firstPath);
         visited.add(start);
 
+        List<LinkedList<Vertex>> allPaths = new LinkedList<>();
+
         while (!agenda.isEmpty()) {
             LinkedList<Vertex> currentPath = agenda.poll();
             Vertex currentNode = currentPath.getLast();
 
-            if(include == null && currentNode == end)
-                return currentPath;
-            else if(include != null && currentNode == end && currentPath.containsAll(include))
-                return currentPath;
+
+            if (currentNode.equals(end)) {
+                allPaths.add(new LinkedList<>(currentPath));
+                continue;
+            }
 
             for (Vertex neighbor : currentNode.getNeighbors()) {
-                if (!visited.contains(neighbor)) {
-                    visited.add(neighbor);
+                if (!visited.contains(neighbor) && !currentPath.contains(neighbor)) {
                     LinkedList<Vertex> nextPath = new LinkedList<>(currentPath);
                     nextPath.add(neighbor);
                     agenda.add(nextPath);
                 }
             }
         }
-        return null;
+
+        if (allPaths.isEmpty()) {
+            return null;
+        }
+        double minWeight = Double.MAX_VALUE;
+        LinkedList<Vertex> bestPath = null;
+
+        for (LinkedList<Vertex> path : allPaths) {
+            if (include == null || path.containsAll(include)) {
+                double weight = pathWeight(path);
+
+                if (weight < minWeight) {
+                    minWeight = weight;
+                    bestPath = path;
+                }
+            }
+        }
+
+        return bestPath;
+    }
+
+    private static double pathWeight(LinkedList<Vertex> path) {
+
+        double total = 0;
+        Vertex prev = path.get(0);
+
+        for (int i = 1; i < path.size(); i++) {
+            Vertex curr = path.get(i);
+
+            for (Edge e : prev.getBranches()) {
+                if ((e.getNode1() == curr || e.getNode2() == curr)) {
+                    total += e.getWeight();
+                    break;
+                }
+            }
+            prev = curr;
+        }
+        return total;
     }
 
     public static LinkedList<int[]> BFS(int[] start, int[] end, LinkedList<int[]> wallsAndObjects){
